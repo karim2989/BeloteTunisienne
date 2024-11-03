@@ -1,0 +1,4 @@
+class Trick{
+
+}
+export {Trick}
