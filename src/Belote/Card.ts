@@ -1,7 +1,7 @@
 import { log, trace } from "console";
 
 enum Suit {
-    Unknown = -1, Clubs, Spade, Heart, Diamond,NoTrump,AllTrump
+    Unknown = -1, Clubs, Spade, Heart, Diamond, NoTrump, AllTrump
 }
 enum Rank {
     Unknown = -1, Seven, Eight, Nine, Valet, Dame, Roi, Ten, Eleven
@@ -45,8 +45,18 @@ class Card {
         this.Suit = suit;
         this.Rank = rank;
     }
-    public GreaterThan(other: Card, trump: boolean = false): boolean {
-        if (!trump)
+    public GreaterThanWithContext(other: Card, trump: Suit): boolean {
+        if (this.Suit == trump && other.Suit == trump)
+            return this.GreaterThan(other, true);
+        else if (this.Suit == trump)
+            return true
+        else if (other.Suit == trump)
+            return false
+        else
+            return this.GreaterThan(other, false);
+    }
+    public GreaterThan(other: Card, isTrump: boolean = false): boolean {
+        if (!isTrump)
             return this.Rank > other.Rank
         else
             return (trumpRanksOrder.get(this.Rank) as number) > (trumpRanksOrder.get(other.Rank) as number)
@@ -97,4 +107,4 @@ class Card {
         throw trace("invalid input: " + input);
     }
 }
-export { Card, Rank, Suit, }
+export { Card, Rank, Suit, RankCharacter,SuitCharacter }

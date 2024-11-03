@@ -47,6 +47,30 @@ class Deck extends Array<Card> {
             if (this[i].Equals(s)) return true
         return false
     }
+    public RemoveCard(c: Card): void {
+        let index: number = -1;
+        for (let i = 0; i < this.length; i++) {
+            if (this[i].Equals(c)) {
+                index = i
+                break
+            }
+        }
+        if (index != -1)
+            this.splice(index, 1)
+    }
+    public Add(other: Deck): void {
+        other.forEach(e => { this.push(e) })
+    }
+    public Points(trump: Suit): number {
+        let output: number = 0;
+        this.forEach(e => {
+            if (trump == e.Suit || trump == Suit.AllTrump)
+                output += e.TrumpPoint
+            else
+                output += e.PlainPoint
+        })
+        return output
+    }
     public static FromString(input: string): Deck {
         let output = new Deck();
         input.split(' ').forEach(e => output.push(Card.FromString(e)))
