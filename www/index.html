@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Belote</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    return
+    var socket = io();
+    let username = sessionStorage.getItem('username')
+    while (username == null || username == '' || username == 'null') {
+      username = prompt("Please enter your username", "");
+      sessionStorage.setItem("username", username)
+    }
+
+    console.log(socket)
+    socket.emit()
+  </script>
+</head>
+
+<body style="background-color: brown;">
+  <iframe src="client.html" onresize=""
+    style="border: 0;margin: 0;width: 600px; height: 600px"></iframe>
+</body>
+
+</html>

@@ -1,0 +1,204 @@
+{
+    "startingPlayer": 0,
+    "CurrentPlayer": 0,
+    "State": 1,
+    "Players": [
+        {
+            "Id": 0,
+            "Hand": [
+                {
+                    "Suit": 1,
+                    "Rank": 2
+                },
+                {
+                    "Suit": 0,
+                    "Rank": 3
+                },
+                {
+                    "Suit": 3,
+                    "Rank": 7
+                },
+                {
+                    "Suit": 1,
+                    "Rank": 0
+                },
+                {
+                    "Suit": 0,
+                    "Rank": 1
+                },
+                {
+                    "Suit": 1,
+                    "Rank": 5
+                },
+                {
+                    "Suit": 3,
+                    "Rank": 6
+                },
+                {
+                    "Suit": 2,
+                    "Rank": 4
+                }
+            ]
+        },
+        {
+            "Id": 1,
+            "Hand": [
+                {
+                    "Suit": 1,
+                    "Rank": 7
+                },
+                {
+                    "Suit": 3,
+                    "Rank": 3
+                },
+                {
+                    "Suit": 1,
+                    "Rank": 3
+                },
+                {
+                    "Suit": 1,
+                    "Rank": 4
+                },
+                {
+                    "Suit": 2,
+                    "Rank": 0
+                },
+                {
+                    "Suit": 1,
+                    "Rank": 6
+                },
+                {
+                    "Suit": 3,
+                    "Rank": 4
+                },
+                {
+                    "Suit": 2,
+                    "Rank": 1
+                }
+            ]
+        },
+        {
+            "Id": 2,
+            "Hand": [
+                {
+                    "Suit": 3,
+                    "Rank": 0
+                },
+                {
+                    "Suit": 3,
+                    "Rank": 5
+                },
+                {
+                    "Suit": 3,
+                    "Rank": 1
+                },
+                {
+                    "Suit": 0,
+                    "Rank": 4
+                },
+                {
+                    "Suit": 0,
+                    "Rank": 7
+                },
+                {
+                    "Suit": 3,
+                    "Rank": 2
+                },
+                {
+                    "Suit": 2,
+                    "Rank": 7
+                },
+                {
+                    "Suit": 2,
+                    "Rank": 3
+                }
+            ]
+        },
+        {
+            "Id": 3,
+            "Hand": [
+                {
+                    "Suit": 2,
+                    "Rank": 6
+                },
+                {
+                    "Suit": 0,
+                    "Rank": 5
+                },
+                {
+                    "Suit": 2,
+                    "Rank": 5
+                },
+                {
+                    "Suit": 2,
+                    "Rank": 2
+                },
+                {
+                    "Suit": 1,
+                    "Rank": 1
+                },
+                {
+                    "Suit": 0,
+                    "Rank": 2
+                },
+                {
+                    "Suit": 0,
+                    "Rank": 0
+                },
+                {
+                    "Suit": 0,
+                    "Rank": 6
+                }
+            ]
+        }
+    ],
+    "Bids": [
+        {
+            "Issuer": 0,
+            "Team": 0,
+            "Value": 90,
+            "Trump": 0,
+            "Severity": 160
+        },
+        {
+            "Issuer": 1,
+            "Team": 1,
+            "Value": 100,
+            "Trump": 3,
+            "Severity": 160
+        },
+        {
+            "Issuer": 3,
+            "Team": 1,
+            "Value": 110,
+            "Trump": 2,
+            "Severity": 160
+        },
+        {
+            "Issuer": 2,
+            "Team": 0,
+            "Value": 0,
+            "Trump": 2,
+            "Severity": 250
+        },
+        {
+            "Issuer": 3,
+            "Team": 1,
+            "Value": 0,
+            "Trump": 3,
+            "Severity": 960
+        },
+        {
+            "Issuer": 2,
+            "Team": 0,
+            "Value": 0,
+            "Trump": 2,
+            "Severity": 1000
+        }
+    ],
+    "Tricks": [],
+    "EarnedDecks": [
+        [],
+        []
+    ]
+}

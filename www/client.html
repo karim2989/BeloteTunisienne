@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belote</title>
+    <link rel="stylesheet" href="clientStyle.css">
+
+    <!-- logo font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap"
+        rel="stylesheet">
+    <script src="wwwdist/AssetManager.js"></script>
+    <script src="wwwdist/TableRenderer.js"></script>
+</head>
+
+<body>
+    <main>
+        <section class="table">
+            <div class="tablecenter">
+                <div class="tablebg">
+                    <div class="tablebgtext">
+                        مقهى<br>قرطـاج
+                    </div>
+                </div>
+                <div class="tablecards">
+
+                </div>
+            </div>
+        </section>
+        <section class="hand player1hand nonselectable">
+            <p>username1</p>
+            <div class="deck">
+                <img class="card" draggable="false" src="assets/768_384.png">
+                <img class="card" draggable="false" src="assets/768_384.png">
+                <img class="card" draggable="false" src="assets/768_384.png">
+                <img class="card" draggable="false" src="assets/768_384.png">
+                <img class="card" draggable="false" src="assets/768_384.png">
+                <img class="card" draggable="false" src="assets/768_384.png">
+                <img class="card" draggable="false" src="assets/768_384.png">
+                <img class="card" draggable="false" src="assets/768_384.png">
+            </div>
+        </section>
+        <section class="hand player3hand nonselectable">
+            <p>username3</p>
+            <div class="deck">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+            </div>
+        </section>
+        <section class="hand player2hand nonselectable">
+            <p>username2</p>
+            <div class="deck">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+                <img class="card" src="assets/768_384.png">
+            </div>
+        </section>
+        <section class="hand player0hand">
+            <p>username0</p>
+            <div class="deck">
+                <img class="card draggable zoomable" src="assets/768_384.png">
+                <img class="card draggable zoomable" src="assets/768_384.png">
+                <img class="card draggable zoomable" src="assets/768_384.png">
+                <img class="card draggable zoomable" src="assets/768_384.png">
+                <img class="card draggable zoomable" src="assets/768_384.png">
+                <img class="card draggable zoomable" src="assets/768_384.png">
+                <img class="card draggable zoomable" src="assets/768_384.png">
+                <img class="card draggable zoomable" src="assets/768_384.png">
+            </div>
+        </section>
+        <section class="bidding">
+            <form>
+                <h4 style="margin: 0;">Anonce</h4>
+                <label class="biddingFormElement" for="valuer"> valeur: <span id="bidding_value_text">110</span>
+                </label>
+                <input class="biddingFormElement" type="range" step="10" min="80" max="190"
+                    id="valuer"><!-- 90 100 110 120 130 140 150 160 170 180 kaput-->
+            </form>
+        </section>
+        <section class="options">
+
+        </section>
+        <section class="gamestate">
+
+        </section>
+        <section class="userstate">
+
+        </section>
+    </main>
+</body>
+
+</html>

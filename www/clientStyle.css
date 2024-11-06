@@ -1,0 +1,126 @@
+body {
+    margin: 0;
+}
+
+main {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    background-color: #141013;
+    width: 100vh;
+    height: 100vh;
+    padding: 0;
+    color: ghostwhite;
+
+    display: grid;
+    grid-template-areas:
+        "gamestate   player2hand userstate  "
+        "player3hand table       player1hand"
+        "bidbuttons  player0hand options    ";
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: 1fr 3fr 1fr;
+    overflow: hidden;
+}
+
+.bidding{
+    grid-area: bidbuttons;
+}
+
+.biddingFormElement{
+    width: 100%;
+} 
+
+.table {
+    display: inline;
+    user-select: none; 
+    grid-area: table;
+    border-radius: 20%;
+    background: radial-gradient(#35654d,#264d39);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    z-index: 2;
+}
+
+.tablecenter{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 4;
+}
+
+.tablecards{
+    z-index: 5;
+}
+.tablebgtext{
+    position: absolute;
+    top: 42vh;
+    left: 47vh;
+    z-index: 3;
+    font-size: large;
+    color: #386e53;
+    font-family: "Noto Nastaliq Urdu", serif;
+}
+
+.hand p {
+    margin: 2vh;
+}
+
+.hand {
+    user-select: none;
+    margin: 1vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 2vh;
+    background-color: #141013;
+    border: 0.4vh rgb(49, 49, 49) dotted;
+    width: 55vh;
+    height: 18vh;
+}
+
+.nonselectable{
+    user-select: none; 
+}
+.player2hand {
+    grid-area: player2hand;
+    transform: rotate(180deg);
+}
+
+.player0hand {
+    grid-area: player0hand;
+}
+
+.player3hand {
+    grid-area: player3hand;
+    position: absolute;
+    top: 40vh;
+    right: 61vh;
+    transform: rotate(90deg);
+}
+
+.player1hand {
+    grid-area: player1hand;
+    position: absolute;
+    top: 40vh;
+    right: -19vh;
+    transform: rotate(-90deg);
+}
+
+.card {
+    width: 5.8vw;
+    margin: 0.1vh;
+}
+
+.card.zoomable:hover {
+    animation: zoom .2s forwards;
+}
+
+@keyframes zoom {
+    from { transform: scale(1); }
+
+    to{ transform: scale(1.5);}
+}
+
+
+.card.draggable {}

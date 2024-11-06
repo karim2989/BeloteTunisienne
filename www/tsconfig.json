@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+       "target": "ES2022",
+       "module": "commonjs",
+       "rootDir": "./ts",
+       "resolveJsonModule": true,
+       "outDir": "./wwwdist",
+       "esModuleInterop": true,
+       "forceConsistentCasingInFileNames": true,
+       "strict": false,
+       "noImplicitAny": true,
+       "skipLibCheck": true,
+       "sourceMap": true
+    }
+  }
