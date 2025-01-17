@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "test.test.js",
   "scripts": {
+    "cli": "npx ts-node index.ts",
     "test": "jest"
   },
   "keywords": [],
