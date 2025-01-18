@@ -81,6 +81,7 @@ export default abstract class Card {
 
     public static PlainValue(card:number)
     {
+        card = (card | card >> 8 | card >> 16 | card >> 24) & Card.Heart;
         switch (card) {
             case Card.Seven: return 0;
             case Card.Eight: return 0;
@@ -96,6 +97,7 @@ export default abstract class Card {
     }
     public static TrumpValue(card:number)
     {
+        card = (card | card >> 8 | card >> 16 | card >> 24) & Card.Heart;
         switch (card) {
             case Card.Seven: return 0;
             case Card.Eight: return 0;
@@ -128,8 +130,10 @@ export default abstract class Card {
 
     public static IsHigher(card1: number, card2: number, Trump: number): boolean {
         if (Card.IsTrump(card1, Trump) && !Card.IsTrump(card2, Trump)) return true;
-        if (!Card.IsTrump(card1, Trump) && Card.IsTrump(card2, Trump)) return false;
-        return Card.TrumpValue(card1) > Card.TrumpValue(card2);
+        else if (!Card.IsTrump(card1, Trump) && Card.IsTrump(card2, Trump)) return false;
+        else if (Card.TrumpValue(card1) > Card.TrumpValue(card2)) return true;
+        else if (Card.TrumpValue(card1) < Card.TrumpValue(card2)) return false;
+        else return this.Rank(card1) > this.Rank(card2); // deals with 7, 8 and 9
     }
 
     public static FromString(card: string): number {
@@ -176,5 +180,9 @@ export default abstract class Card {
             case Card.Club: suit = 'C'; break;
         }
         return rank + suit;
+    }
+
+    public static FromRankAndSuit(rank :number,suit:number){
+        return rank * (suit & Card.SuiteMask);
     }
 }

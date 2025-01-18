@@ -48,4 +48,13 @@ describe('Deck', () => {
             }
         });
     });
+
+    describe("returns highest card",() => {
+        expect(Deck.HighestTrumpRank(0xf0)).toBe(128);
+        expect(Deck.HighestTrumpRank(0xf0_00)).toBe(128);
+        expect(Deck.HighestTrumpRank(0xf0_00_00)).toBe(128);
+        expect(Deck.HighestTrumpRank(0x12)).toBe(16);
+        expect(Deck.HighestTrumpRank(0x12_00)).toBe(16);
+        expect(Deck.HighestTrumpRank(0x12_00_00)).toBe(16);
+    });
 });

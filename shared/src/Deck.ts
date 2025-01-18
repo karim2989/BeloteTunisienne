@@ -40,19 +40,32 @@ export default abstract class Deck {
         return Deck === 0;
     }
 
+    public static HighestTrumpRank(deck: number): number {
+        deck |= deck >> 8;
+        deck |= deck >> 16;
+        deck |= deck >> 24;
+        deck &= 0x00_00_00_ff;
+        if(deck & Card.Valet) return Card.Valet;
+        else if(deck & Card.Nine) return Card.Nine;
+        for (let i = 128; i > 0; i = i >> 1) {
+            if (deck & i) return i;
+        }
+        return Deck.None
+    }
+
     public static Deal(): Array<number> {
         let handCount = new Array<number>(4);
         let hand = new Array<number>(4);
-        handCount.fill(0,0,4);
-        hand.fill(0,0,4);
+        handCount.fill(0, 0, 4);
+        hand.fill(0, 0, 4);
         for (let i = 0; i < 32; i++) {
             let currentMask = 1 << i;
             let p;
-            do{
+            do {
                 p = Math.floor(Math.random() * 4);
             }
-            while(handCount[p] >= 8)
-                hand[p] = hand[p] | currentMask;
+            while (handCount[p] >= 8)
+            hand[p] = hand[p] | currentMask;
             handCount[p]++;
         }
         return hand;
