@@ -64,7 +64,7 @@ describe('Round full game simulation', () => {
 
         for (let i = 0; i < plays.length; i++) {
             const play = plays[i];
-            console.log(i)
+            //console.log(i)
             expect(round.Play(round.CurrentPlayer, play[0])).toBe(true);
             expect(round.Play(round.CurrentPlayer, play[1])).toBe(true);
             expect(round.Play(round.CurrentPlayer, play[2])).toBe(true);

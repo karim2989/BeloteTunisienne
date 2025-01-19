@@ -1,1 +1,4 @@
 node_modules
+.vscode
+shared/dist
+client/dist
