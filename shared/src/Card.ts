@@ -1,55 +1,55 @@
 export default abstract class Card {
-    public static readonly Heart =     0x00_00_00_ff;
-    public static readonly Diamond =   0x00_00_ff_00;
-    public static readonly Spade =     0x00_ff_00_00;
-    public static readonly Club =      0xff_00_00_00;
+    public static readonly Heart = 0x00_00_00_ff;
+    public static readonly Diamond = 0x00_00_ff_00;
+    public static readonly Spade = 0x00_ff_00_00;
+    public static readonly Club = 0xff_00_00_00;
 
     public static readonly SuiteMask = 0x01_01_01_01;
 
-    public static readonly Seven =     0b0000_0001;
-    public static readonly Eight =     0b0000_0010;
-    public static readonly Nine =      0b0000_0100;
-    public static readonly Valet =     0b0000_1000;
-    public static readonly Queen =     0b0001_0000;
-    public static readonly King =      0b0010_0000;
-    public static readonly Ten =       0b0100_0000;
-    public static readonly Eleven =    0b1000_0000;
+    public static readonly Seven = 0b0000_0001;
+    public static readonly Eight = 0b0000_0010;
+    public static readonly Nine = 0b0000_0100;
+    public static readonly Valet = 0b0000_1000;
+    public static readonly Queen = 0b0001_0000;
+    public static readonly King = 0b0010_0000;
+    public static readonly Ten = 0b0100_0000;
+    public static readonly Eleven = 0b1000_0000;
 
-    public static readonly SevenOfHearts =     Card.Seven * (Card.Heart & Card.SuiteMask);
-    public static readonly EightOfHearts =     Card.Eight * (Card.Heart & Card.SuiteMask);
-    public static readonly NineOfHearts =      Card.Nine * (Card.Heart & Card.SuiteMask);
-    public static readonly ValetOfHearts =     Card.Valet * (Card.Heart & Card.SuiteMask);
-    public static readonly QueenOfHearts =     Card.Queen * (Card.Heart & Card.SuiteMask);
-    public static readonly KingOfHearts =      Card.King * (Card.Heart & Card.SuiteMask);
-    public static readonly TenOfHearts =       Card.Ten * (Card.Heart & Card.SuiteMask);
-    public static readonly ElevenOfHearts =    Card.Eleven * (Card.Heart & Card.SuiteMask);
+    public static readonly SevenOfHearts = Card.Seven * (Card.Heart & Card.SuiteMask);
+    public static readonly EightOfHearts = Card.Eight * (Card.Heart & Card.SuiteMask);
+    public static readonly NineOfHearts = Card.Nine * (Card.Heart & Card.SuiteMask);
+    public static readonly ValetOfHearts = Card.Valet * (Card.Heart & Card.SuiteMask);
+    public static readonly QueenOfHearts = Card.Queen * (Card.Heart & Card.SuiteMask);
+    public static readonly KingOfHearts = Card.King * (Card.Heart & Card.SuiteMask);
+    public static readonly TenOfHearts = Card.Ten * (Card.Heart & Card.SuiteMask);
+    public static readonly ElevenOfHearts = Card.Eleven * (Card.Heart & Card.SuiteMask);
 
-    public static readonly SevenOfDiamonds =     Card.Seven * (Card.Diamond & Card.SuiteMask);
-    public static readonly EightOfDiamonds =     Card.Eight * (Card.Diamond & Card.SuiteMask);
-    public static readonly NineOfDiamonds =      Card.Nine * (Card.Diamond & Card.SuiteMask);
-    public static readonly ValetOfDiamonds =     Card.Valet * (Card.Diamond & Card.SuiteMask);
-    public static readonly QueenOfDiamonds =     Card.Queen * (Card.Diamond & Card.SuiteMask);
-    public static readonly KingOfDiamonds =      Card.King * (Card.Diamond & Card.SuiteMask);
-    public static readonly TenOfDiamonds =       Card.Ten * (Card.Diamond & Card.SuiteMask);
-    public static readonly ElevenOfDiamonds =    Card.Eleven * (Card.Diamond & Card.SuiteMask);
+    public static readonly SevenOfDiamonds = Card.Seven * (Card.Diamond & Card.SuiteMask);
+    public static readonly EightOfDiamonds = Card.Eight * (Card.Diamond & Card.SuiteMask);
+    public static readonly NineOfDiamonds = Card.Nine * (Card.Diamond & Card.SuiteMask);
+    public static readonly ValetOfDiamonds = Card.Valet * (Card.Diamond & Card.SuiteMask);
+    public static readonly QueenOfDiamonds = Card.Queen * (Card.Diamond & Card.SuiteMask);
+    public static readonly KingOfDiamonds = Card.King * (Card.Diamond & Card.SuiteMask);
+    public static readonly TenOfDiamonds = Card.Ten * (Card.Diamond & Card.SuiteMask);
+    public static readonly ElevenOfDiamonds = Card.Eleven * (Card.Diamond & Card.SuiteMask);
 
-    public static readonly SevenOfSpades =     Card.Seven * (Card.Spade & Card.SuiteMask);
-    public static readonly EightOfSpades =     Card.Eight * (Card.Spade & Card.SuiteMask);
-    public static readonly NineOfSpades =      Card.Nine * (Card.Spade & Card.SuiteMask);
-    public static readonly ValetOfSpades =     Card.Valet * (Card.Spade & Card.SuiteMask);
-    public static readonly QueenOfSpades =     Card.Queen * (Card.Spade & Card.SuiteMask);
-    public static readonly KingOfSpades =      Card.King * (Card.Spade & Card.SuiteMask);
-    public static readonly TenOfSpades =       Card.Ten * (Card.Spade & Card.SuiteMask);
-    public static readonly ElevenOfSpades =    Card.Eleven * (Card.Spade & Card.SuiteMask);
+    public static readonly SevenOfSpades = Card.Seven * (Card.Spade & Card.SuiteMask);
+    public static readonly EightOfSpades = Card.Eight * (Card.Spade & Card.SuiteMask);
+    public static readonly NineOfSpades = Card.Nine * (Card.Spade & Card.SuiteMask);
+    public static readonly ValetOfSpades = Card.Valet * (Card.Spade & Card.SuiteMask);
+    public static readonly QueenOfSpades = Card.Queen * (Card.Spade & Card.SuiteMask);
+    public static readonly KingOfSpades = Card.King * (Card.Spade & Card.SuiteMask);
+    public static readonly TenOfSpades = Card.Ten * (Card.Spade & Card.SuiteMask);
+    public static readonly ElevenOfSpades = Card.Eleven * (Card.Spade & Card.SuiteMask);
 
-    public static readonly SevenOfClubs =     Card.Seven * (Card.Club & Card.SuiteMask);
-    public static readonly EightOfClubs =     Card.Eight * (Card.Club & Card.SuiteMask);
-    public static readonly NineOfClubs =      Card.Nine * (Card.Club & Card.SuiteMask);
-    public static readonly ValetOfClubs =     Card.Valet * (Card.Club & Card.SuiteMask);
-    public static readonly QueenOfClubs =     Card.Queen * (Card.Club & Card.SuiteMask);
-    public static readonly KingOfClubs =      Card.King * (Card.Club & Card.SuiteMask);
-    public static readonly TenOfClubs =       Card.Ten * (Card.Club & Card.SuiteMask);
-    public static readonly ElevenOfClubs =    Card.Eleven * (Card.Club & Card.SuiteMask);
+    public static readonly SevenOfClubs = Card.Seven * (Card.Club & Card.SuiteMask);
+    public static readonly EightOfClubs = Card.Eight * (Card.Club & Card.SuiteMask);
+    public static readonly NineOfClubs = Card.Nine * (Card.Club & Card.SuiteMask);
+    public static readonly ValetOfClubs = Card.Valet * (Card.Club & Card.SuiteMask);
+    public static readonly QueenOfClubs = Card.Queen * (Card.Club & Card.SuiteMask);
+    public static readonly KingOfClubs = Card.King * (Card.Club & Card.SuiteMask);
+    public static readonly TenOfClubs = Card.Ten * (Card.Club & Card.SuiteMask);
+    public static readonly ElevenOfClubs = Card.Eleven * (Card.Club & Card.SuiteMask);
 
     /**
      * @param {number} card
@@ -79,8 +79,7 @@ export default abstract class Card {
         }
     }
 
-    public static PlainValue(card:number)
-    {
+    public static PlainValue(card: number) {
         card = (card | card >> 8 | card >> 16 | card >> 24) & Card.Heart;
         switch (card) {
             case Card.Seven: return 0;
@@ -91,12 +90,11 @@ export default abstract class Card {
             case Card.King: return 4;
             case Card.Ten: return 10;
             case Card.Eleven: return 11;
-        
+
             default: throw 'value lookup: invalid call with param ' + card
         }
     }
-    public static TrumpValue(card:number)
-    {
+    public static TrumpValue(card: number) {
         card = (card | card >> 8 | card >> 16 | card >> 24) & Card.Heart;
         switch (card) {
             case Card.Seven: return 0;
@@ -107,7 +105,7 @@ export default abstract class Card {
             case Card.King: return 4;
             case Card.Ten: return 10;
             case Card.Eleven: return 11;
-        
+
             default: throw 'value lookup: invalid call with param ' + card
         }
     }
@@ -120,15 +118,22 @@ export default abstract class Card {
     public static IsHigher(card1: number, card2: number, Trump: number): boolean {
         if (Card.IsTrump(card1, Trump) && !Card.IsTrump(card2, Trump)) return true;
         else if (!Card.IsTrump(card1, Trump) && Card.IsTrump(card2, Trump)) return false;
-        else if (Card.TrumpValue(card1) > Card.TrumpValue(card2)) return true;
-        else if (Card.TrumpValue(card1) < Card.TrumpValue(card2)) return false;
-        else return this.Rank(card1) > this.Rank(card2); // deals with 7, 8 and 9
+        else if (Card.IsTrump(card1, Trump)) {
+            let [v1, v2] = [Card.TrumpValue(card1), Card.TrumpValue(card2)]
+            if (v1 == v2) return card1 > card2
+            else return v1 > v2
+        }
+        else {
+            let [v1, v2] = [Card.PlainValue(card1), Card.PlainValue(card2)]
+            if (v1 == v2) return card1 > card2
+            else return v1 > v2
+        }
     }
 
     public static FromString(card: string): number {
         if (card.length !== 2) throw 'invalid card string ' + card;
-        let rank,suit;
-        switch(card[0].toLocaleLowerCase()){
+        let rank, suit;
+        switch (card[0].toLocaleLowerCase()) {
             case '7': rank = Card.Seven; break;
             case '8': rank = Card.Eight; break;
             case '9': rank = Card.Nine; break;
@@ -139,7 +144,7 @@ export default abstract class Card {
             case '1': rank = Card.Eleven; break;
             default: throw 'FromString: invalid rank ' + card[0];
         }
-        switch(card[1].toLocaleLowerCase()){
+        switch (card[1].toLocaleLowerCase()) {
             case 'h': suit = Card.Heart; break;
             case 'd': suit = Card.Diamond; break;
             case 's': suit = Card.Spade; break;
@@ -171,7 +176,7 @@ export default abstract class Card {
         return rank + suit;
     }
 
-    public static FromRankAndSuit(rank :number,suit:number){
+    public static FromRankAndSuit(rank: number, suit: number) {
         return rank * (suit & Card.SuiteMask);
     }
 }

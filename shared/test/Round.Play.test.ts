@@ -28,6 +28,3 @@ describe('Round.Play basic tests', () => {
     });
 
 });
-
-
-describe("simulate round", () => test.todo("sumulate round"))

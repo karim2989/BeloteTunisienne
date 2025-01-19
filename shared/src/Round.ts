@@ -37,10 +37,16 @@ export default class Round {
     public get Hands(): Int32Array { return this.hands; }
     public get Tricks(): Array<Trick> { return this.tricks; }
 
-    constructor(firstplayer: number) {
+    constructor(firstplayer: number, hands: Array<string> = []) {
         this.firstplayer = firstplayer;
         this.currentPlayer = firstplayer;
-        this.hands = Deck.Deal();
+        if (hands.length != 4)
+            this.hands = Deck.Deal();
+        else {
+            this.hands = new Int32Array(4);
+            for (let i = 0; i < 4; i++)
+                this.hands[i] = Deck.FromString(hands[i])
+        }
     }
 
     public Bid(player: number, bidType: BidType, bidValue: number, bidTrump: number): boolean {
@@ -49,7 +55,7 @@ export default class Round {
         let isInvalidPlayer = player < 0 || player > 3
         let isInvalidType = bidType as number < BidType.pass || bidType as number > BidType.surmanche
         let isInvalidValue = bidType == BidType.annonce && (bidValue < 90 || bidValue > 180 || bidValue % 10 > 0)
-        let isInvalidTrump = bidTrump % Card.Heart != 0
+        let isInvalidTrump = bidType != BidType.pass && bidTrump % Card.Heart != 0
         if (isInvalidPlayer || isInvalidType || isInvalidValue || isInvalidTrump) // bonkers bid 
             return false;
 
@@ -100,31 +106,39 @@ export default class Round {
         if (player != this.currentPlayer)
             return false;
 
+        if (this.roundState == RoundState.inbetweenphase)
+            this.roundState = RoundState.playphase
+
         if (this.tricks.at(-1)?.tryPlayCard(card, this.hands[player])) {
+            this.hands[player] = this.hands[player] ^ card;
             this.currentPlayer = ++player % 4;
             if (this.currentPlayer == this.firstplayer) {// trick done:
                 ///@ts-expect-error
                 this.firstplayer = (this.firstplayer + this.tricks.at(-1)?.WinningPlayIndex) % 4;
                 this.currentPlayer = this.firstplayer;
-                this.tricks.push(new Trick(this.currentBidTrump));
+                if (this.tricks.length == 8)
+                    this.roundState = RoundState.done
+                else
+                    this.tricks.push(new Trick(this.currentBidTrump));
             }
             return true
         }
         return false
     }
-
     public Dump(): string {
-        return "current player: " + this.currentPlayer + " \n" +
-            "round state :" + this.roundState + " \n" +
-            "bid information:" + "\n" +
-            this.currentBidType + " " +
-            this.currentBidTrump + " " +
-            this.currentBidValue + " " +
-            this.currentBidPlayer + "\n" +
-            "hands" + "\n" +
-            Deck.ToString(this.hands[0]) + "\n" +
-            Deck.ToString(this.hands[1]) + "\n" +
-            Deck.ToString(this.hands[2]) + "\n" +
-            Deck.ToString(this.hands[3]) + "\n"
+        const states = ['bidphase', 'inbetweenphase', 'playphase', 'done'];
+        const bidTypes = ['pass', 'annonce', 'contre', 'surcontre', 'kaput', 'kaputgeneral', 'surmanche'];
+
+        return [
+            `Current player: ${this.currentPlayer}`,
+            `Round state: ${states[this.roundState]}`,
+            'Bid information:',
+            `Type: ${bidTypes[this.currentBidType]}`,
+            `Trump: ${this.currentBidTrump}`,
+            `Value: ${this.currentBidValue}`,
+            `Player: ${this.currentBidPlayer}`,
+            'Hands:',
+            ...Array.from({ length: 4 }, (_, i) => `Player ${i}: ${Deck.ToString(this.hands[i])}`)
+        ].join('\n');
     }
 }

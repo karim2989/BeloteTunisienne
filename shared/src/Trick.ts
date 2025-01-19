@@ -18,7 +18,7 @@ export default class Trick {
         /* local functions: */
         function isWrongfullyUnderRuffing(card: number, hand: number, trump: number, winningCard: number): Boolean {
             let highestCard = Deck.HighestTrumpRank(Deck.Intersect(hand, trump));
-            return Card.IsHigher(highestCard,winningCard,trump) && Card.IsHigher(winningCard,card,trump);
+            return Card.IsHigher(highestCard, winningCard, trump) && Card.IsHigher(winningCard, card, trump);
         }
 
         /* main treatment: */
@@ -34,7 +34,8 @@ export default class Trick {
         }
 
         if (Card.Suit(this.cards[0]) == Card.Suit(card) &&
-            !isWrongfullyUnderRuffing(card, hand, this.trump, this.cards[this.winningPlayIndex])
+            !(Card.Suit(this.cards[0]) == this.trump &&
+                isWrongfullyUnderRuffing(card, hand, this.trump, this.cards[this.winningPlayIndex]))
         ) // played leading suit => always legal (except if dodging an overruff)
         {
             if (Card.IsHigher(card, this.cards[this.winningPlayIndex], this.trump))

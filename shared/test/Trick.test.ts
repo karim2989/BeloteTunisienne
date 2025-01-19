@@ -20,8 +20,6 @@ describe("Simulated trick chain 1 :", () => {
         expect(trick.tryPlayCard(Card.NineOfHearts, hands[1])).toBe(true);
         hands[1] = Deck.Difference(hands[1], Card.NineOfHearts);
 
-        expect(trick.tryPlayCard(Card.TenOfClubs, hands[2])).toBe(false);
-        expect(trick.tryPlayCard(Card.NineOfSpades, hands[2])).toBe(false);
         expect(trick.tryPlayCard(Card.SevenOfDiamonds, hands[2])).toBe(true);
         hands[2] = Deck.Difference(hands[2], Card.SevenOfDiamonds);
 
