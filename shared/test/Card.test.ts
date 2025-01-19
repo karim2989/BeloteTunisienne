@@ -69,18 +69,18 @@ describe('Card', () => {
 
     describe('Value', () => {
         it('should calculate plain card values correctly', () => {
-            expect(Card.Value(Card.ValetOfHearts, Card.Diamond)).toBe(2);
-            expect(Card.Value(Card.TenOfSpades, Card.Heart)).toBe(10);
+            expect(Deck.Value(Card.ValetOfHearts, Card.Diamond)).toBe(2);
+            expect(Deck.Value(Card.TenOfSpades, Card.Heart)).toBe(10);
         });
 
         it('should calculate trump card values correctly', () => {
-            expect(Card.Value(Card.ValetOfDiamonds, Card.Diamond)).toBe(20);
-            expect(Card.Value(Card.NineOfHearts, Card.Heart)).toBe(14);
+            expect(Deck.Value(Card.ValetOfDiamonds, Card.Diamond)).toBe(20);
+            expect(Deck.Value(Card.NineOfHearts, Card.Heart)).toBe(14);
         });
 
         it('should calculate deck values correctly', () => {
             const deck = Deck.Union(Card.ValetOfHearts, Card.NineOfHearts);
-            expect(Card.Value(deck, Card.Heart)).toBe(34); // Trump Valet(20) + Trump Nine(14)
+            expect(Deck.Value(deck, Card.Heart)).toBe(34); // Trump Valet(20) + Trump Nine(14)
         });
     });
 

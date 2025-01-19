@@ -3,7 +3,7 @@ import Deck from "./Deck";
 
 export default class Trick {
     private trump: number;
-    private cards: Int32Array;
+    private cards: Int32Array;// todo: replace with a number
     private cardsIndex: number = 0;
     private winningPlayIndex: number = 0;
     public get WinningPlayIndex() { return this.winningPlayIndex; };
@@ -33,8 +33,7 @@ export default class Trick {
             return true;
         }
 
-        if (
-            Card.Suit(this.cards[0]) == Card.Suit(card) &&
+        if (Card.Suit(this.cards[0]) == Card.Suit(card) &&
             !isWrongfullyUnderRuffing(card, hand, this.trump, this.cards[this.winningPlayIndex])
         ) // played leading suit => always legal (except if dodging an overruff)
         {
@@ -66,12 +65,10 @@ export default class Trick {
 
         // has no lead cards + team not winning the trick + has trump card(s) => must ruff
 
-        if (Card.Suit(card) != Card.Suit(this.trump))// did not play trup => illegal
+        if (Card.Suit(card) != Card.Suit(this.trump))// did not ruff => illegal
             return false;
 
-        if (
-            isWrongfullyUnderRuffing(card, hand, this.trump, this.cards[this.winningPlayIndex])
-        )// choose to underruff => illegal
+        if (isWrongfullyUnderRuffing(card, hand, this.trump, this.cards[this.winningPlayIndex])) // choose to underruff => illegal
             return false;
 
 

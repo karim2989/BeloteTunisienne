@@ -112,17 +112,6 @@ export default abstract class Card {
         }
     }
 
-    public static Value(Deck: number, Trump: number): number {
-        let value = 0;
-        for (let i = 0; i < 32; i++) {
-            let currentMask = 1 << i;
-            if((Deck & currentMask) === 0) continue;
-            value += (Trump & currentMask) ?
-                Card.TrumpValue(Card.Rank(Deck & currentMask)) :
-                Card.PlainValue(Card.Rank(Deck & currentMask));
-        }
-        return value;
-    }
 
     public static IsTrump(card: number, Trump: number): boolean {
         return (Trump & card) !== 0;

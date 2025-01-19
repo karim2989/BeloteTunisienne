@@ -53,9 +53,9 @@ export default abstract class Deck {
         return Deck.None
     }
 
-    public static Deal(): Array<number> {
-        let handCount = new Array<number>(4);
-        let hand = new Array<number>(4);
+    public static Deal(): Int32Array {
+        let handCount = new Int32Array(4);
+        let hand = new Int32Array(4);
         handCount.fill(0, 0, 4);
         hand.fill(0, 0, 4);
         for (let i = 0; i < 32; i++) {
@@ -91,5 +91,16 @@ export default abstract class Deck {
             }
         }
         return result;
+    }
+    public static Value(Deck: number, Trump: number): number {
+        let value = 0;
+        for (let i = 0; i < 32; i++) {
+            let currentMask = 1 << i;
+            if((Deck & currentMask) === 0) continue;
+            value += (Trump & currentMask) ?
+                Card.TrumpValue(Card.Rank(Deck & currentMask)) :
+                Card.PlainValue(Card.Rank(Deck & currentMask));
+        }
+        return value;
     }
 }
