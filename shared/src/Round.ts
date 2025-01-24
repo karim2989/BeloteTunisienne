@@ -2,7 +2,7 @@ import Card from "./Card";
 import Deck from "./Deck";
 import Trick from "./Trick";
 
-enum BidType { pass = 0, annonce = 1, contre = 2, surcontre = 3, kaput = 4, kaputgeneral = 5, surmanche = 6 }
+export enum BidType { pass = 0, annonce = 1, contre = 2, surcontre = 3, kaput = 4, kaputgeneral = 5, surmanche = 6 , ContreOrSurcontre = 99 }
 enum BidSeverity { syncronise, contre, surcontre }
 
 const severityByType = new Int32Array([
