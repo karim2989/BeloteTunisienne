@@ -1,0 +1,33 @@
+/*import express, { Express, Request, Response } from 'express';
+import cors from 'cors';
+import { WebSocket, WebSocketServer } from 'ws'
+import {DeserializeConnectOrReconnect} from "./shared/src/OverTheNetworkObject"
+DeserializeConnectOrReconnect()
+
+const app: Express = express();
+const port = process.env.PORT || 4000;
+
+app.use(cors());
+
+// serving the client
+app.use(express.static('../client/dist'));
+app.get('/', (req: Request, res: Response) => { res.sendFile("index.html", { root: '../client/dist' }); });
+
+const s = app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
+
+// running the websocket server
+let wss = new WebSocketServer({ server: s });
+wss.on('connection', function connection(ws) {
+    ws.on('error', console.error);
+    ws.on('message', function message(data) {
+        console.log("yoooo recived data");
+        ws.send([2,1]);
+        console.log(data as Uint8Array);
+    });
+});
+
+
+export default app;*/
