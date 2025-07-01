@@ -1,5 +1,5 @@
 import { Bid, BidType } from "./Bid";
-import { Card } from "./Card";
+import { Card, CardUtils } from "./Card";
 import { Deck, DeckUtils } from "./Deck";
 import Trick from "./Trick";
 
@@ -12,15 +12,17 @@ export default class Round {
 
     private roundState = RoundState.bidphase;
     public currentBid: Bid = new Bid(0, BidType.pass, NaN, NaN); // Default bid is a pass with no trump
-    private readonly biddenSuitsByTeam: Deck[] = [DeckUtils.None,DeckUtils.None];
+    private readonly biddenSuitsByTeam: Deck[] = [DeckUtils.None, DeckUtils.None];
 
     private tricks: Array<Trick> = [];
+    private scores: Int32Array = new Int32Array(2);
 
     public get CurrentPlayer(): number { return this.currentPlayer }
     public get RoundState(): RoundState { return this.roundState; }
     public get CurrentBid(): Bid { return this.CurrentBid; }
     public get Hands(): Int32Array { return this.hands; }
     public get Tricks(): Array<Trick> { return this.tricks; }
+    public get Scores(): Int32Array { return this.scores; }
 
     constructor(firstplayer: number, hands: Array<string> = []) {
         this.firstplayer = firstplayer;
@@ -51,7 +53,7 @@ export default class Round {
             }
             if (this.currentBid.Contree == true && bid.Type == BidType.surcontre) {
                 this.currentBid.Surcontree = true;
-                this.roundState = RoundState.done;
+                this.roundState = RoundState.playphase;
                 this.currentPlayer = this.firstplayer;
                 return true;
             }
@@ -73,17 +75,22 @@ export default class Round {
             if (bid.Type == BidType.kaput || (bid.Type == BidType.kaputgeneral && bid.Player != this.firstplayer)) {
                 this.currentBid = bid;
                 this.currentPlayer = this.firstplayer
-                this.roundState = RoundState.done;
+                this.roundState = RoundState.playphase;
             }
             if ((bid.Type == BidType.annonce && this.currentBid.Type == BidType.pass) ||
                 (bid.Type == BidType.annonce && this.currentBid.Type == BidType.annonce && bid.Value > this.currentBid.Value)) {
                 // higher value bid :
+                let lastbid = this.currentBid;
                 this.currentBid = bid;
                 // surmanche check:
                 this.biddenSuitsByTeam[bid.Player % 2] |= bid.Trump;
-                if(this.biddenSuitsByTeam[(bid.Player +1) % 2] == bid.Trump) {
-                    this.currentBid.Surmanchee = true;
-                    this.roundState = RoundState.done;
+                if (this.biddenSuitsByTeam[(bid.Player + 1) % 2] == bid.Trump) {
+                    if (bid.Player == this.firstplayer)
+                        this.currentBid = lastbid;
+                    else {
+                        this.currentBid.Surmanchee = true;
+                        this.roundState = RoundState.playphase;
+                    }
                 }
             }
 
@@ -106,15 +113,62 @@ export default class Round {
         if (this.tricks.length == 0) this.tricks.push(new Trick(this.currentBid.Trump));
 
         if (this.tricks.at(-1)?.tryPlayCard(card, this.hands[player]).value) {
+            if (
+                (this.currentBid.Type == BidType.kaput && (this.tricks.at(-1)?.WinningPlayIndex as number % 2 != this.currentBid.Player % 2)) ||
+                (this.currentBid.Type == BidType.kaputgeneral && (this.tricks.at(-1)?.WinningPlayIndex as number != this.currentBid.Player))
+            ) {
+                let roundPoints = this.currentBid.Type == BidType.kaput ? 500 : 1000;
+                this.roundState = RoundState.done;
+                this.scores[(this.currentBid.Player + 1) % 2] = roundPoints;
+                this.scores[this.currentBid.Player % 2] = 0;
+            }
             this.hands[player] = this.hands[player] ^ card;
             this.currentPlayer = ++player % 4;
             if (this.tricks.at(-1)?.IsDone) {// trick done:
                 ///@ts-expect-error
                 this.firstplayer = (this.firstplayer + this.tricks.at(-1)?.WinningPlayIndex) % 4;
                 this.currentPlayer = this.firstplayer;
-                if (this.tricks.length == 8)
+                if (this.tricks.length == 8) {
                     this.roundState = RoundState.done
-                else
+                    this.tricks.forEach(trick => {
+                        trick.Cards.forEach(c => {
+                            this.scores[(trick.WinningPlayIndex as number) % 2] += CardUtils.Suit(c) == this.currentBid.Trump ? CardUtils.TrumpValue(c) : CardUtils.PlainValue(c);
+                        });
+                    });
+                    switch (this.currentBid.Type) {
+                        case BidType.kaput:
+                            this.scores[(this.currentBid.Player + 1) % 2] += 0;
+                            this.scores[this.currentBid.Player % 2] = 500;
+                            break;
+                        case BidType.kaputgeneral:
+                            this.scores[(this.currentBid.Player + 1) % 2] += 0;
+                            this.scores[this.currentBid.Player % 2] = 1000;
+                            break;
+                        case BidType.annonce:
+                            if (this.currentBid.Surmanchee)
+                                if (this.scores[this.currentBid.Player % 2] >= this.currentBid.Value) { // rbi7t surmanche
+                                    this.scores[(this.currentBid.Player + 1) % 2] = 0;
+                                    this.scores[this.currentBid.Player % 2] = 1000;
+                                }
+                                else {
+                                    this.scores[(this.currentBid.Player + 1) % 2] = 1000;
+                                    this.scores[this.currentBid.Player % 2] = 0;
+                                }
+                            else // mouch surmanche
+                            {
+                                if (this.scores[this.currentBid.Player % 2] >= this.currentBid.Value) { // rbi7t
+                                    this.scores[(this.currentBid.Player + 1) % 2] %= 10;
+                                    this.scores[this.currentBid.Player % 2] %= 10;
+                                }
+                                else {
+                                    this.scores[(this.currentBid.Player + 1) % 2] = 160;
+                                    this.scores[this.currentBid.Player % 2] = 0;
+                                }
+                            }
+                            break;
+                    }
+                }
+                else // round isnt done yet
                     this.tricks.push(new Trick(this.currentBid.Trump));
             }
             return true

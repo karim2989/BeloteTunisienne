@@ -1,42 +1,62 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.app {
+  width: max(100vw,400px);
+  height: max(100vh,400px);
+  background-color: #2C28FF;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+footer {
+  width: calc(100% - 1rem);
+  color: white;
+  border-top: white .125rem solid;
+  display: flex;
+  flex-direction: row;
+
+  padding: .5rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+main{
+  flex-grow: 1;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#serverstatus{
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  display: inline;
+  margin-top: .125rem;
+  margin-right: .125rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+#serverstatus.online{
+  background-color: #4CFF00;
 }
 
-.card {
-  padding: 2em;
+#serverstatus.offline{
+  background-color: #ff0000;
 }
 
-.read-the-docs {
-  color: #888;
+#logininfo,#roominfo{
+  display: inline;
+  margin-inline: .25rem;
+  font-size: .875rem;
+}
+.bigbold{
+  font-size: 1.125rem;
+  font-weight: 900;
+}
+
+.flexfiller{
+  flex-grow: 1;
+}
+
+#disconnectbutton{
+  background-color: white;
+  color: #2C28FF;
+  border-radius: .5rem;
+  padding: .125rem 1.5rem;
+  font-weight: 900;
+  cursor: pointer;
 }

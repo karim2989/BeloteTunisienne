@@ -1,39 +1,22 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { ExternalHooks } from './client';
 
 function App() {
+  const [isOnline, setIsOnline] = useState(false);
+  ExternalHooks.OnOpenOrClose.push((isOpen) => { setIsOnline(isOpen) });
 
   return (
-    <>
-      <h1>Belote</h1>
-      <form>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input type="text" id="username" name="username" required />
-        </div>
-        <div>
-          <label htmlFor="password">Password (optional):</label>
-          <input type="password" id="password" name="password" />
-        </div>
-        <div>
-          <label>
-            <input type="radio" name="roomAction" value="create" defaultChecked />
-            Create New Room
-          </label>
-          <label>
-            <input type="radio" name="roomAction" value="join" />
-            Join Existing Room
-          </label>
-        </div>
-        <div>
-          <label htmlFor="roomId">Room ID:</label>
-          <input type="text" id="roomId" name="roomId" disabled />
-        </div>
-        <button type="submit">Continue</button>
-      </form>
-    </>
+    <div className='app'>
+      <footer>
+        <div id="serverstatus" className={isOnline ? 'online' : 'offline'}></div>
+        <div id='logininfo'><span>you are logged in as</span> <span className='bigbold'>SamaraEnjoyer</span></div>
+        <div id='roominfo'><span>in room number</span> <span className='bigbold'>2546</span></div>
+        <div className='flexfiller'></div>
+        <div id='disconnectbutton'>Disconnect</div>
+      </footer>
+      <main>main</main>
+    </div>
   )
 }
 
