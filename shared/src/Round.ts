@@ -145,16 +145,19 @@ export default class Round {
                             this.scores[this.currentBid.Player % 2] = 1000;
                             break;
                         case BidType.annonce:
-                            if (this.currentBid.Surmanchee)
+                            if (this.currentBid.Surmanchee || this.currentBid.Contree || this.currentBid.Surcontree) {
+                                let roundPoints = this.currentBid.Surmanchee ? 1000
+                                    : (this.currentBid.Surcontree ? 640 : 320);
                                 if (this.scores[this.currentBid.Player % 2] >= this.currentBid.Value) { // rbi7t surmanche
                                     this.scores[(this.currentBid.Player + 1) % 2] = 0;
-                                    this.scores[this.currentBid.Player % 2] = 1000;
+                                    this.scores[this.currentBid.Player % 2] = roundPoints;
                                 }
                                 else {
-                                    this.scores[(this.currentBid.Player + 1) % 2] = 1000;
+                                    this.scores[(this.currentBid.Player + 1) % 2] = roundPoints;
                                     this.scores[this.currentBid.Player % 2] = 0;
                                 }
-                            else // mouch surmanche
+                            }
+                            else // annonce normale
                             {
                                 if (this.scores[this.currentBid.Player % 2] >= this.currentBid.Value) { // rbi7t
                                     this.scores[(this.currentBid.Player + 1) % 2] %= 10;
