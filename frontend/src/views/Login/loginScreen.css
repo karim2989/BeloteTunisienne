@@ -1,0 +1,28 @@
+form {
+    color: white;
+}
+
+input[type='text'],
+input[type='password'] {
+    border-radius: .5rem;
+    background-color: #00000000;
+    border: .125rem solid white;
+    margin: .25rem;
+    color: white;
+    font-weight: bold;
+}
+
+button[type='submit'] {
+    background: white;
+    color: #2c28ff;
+    padding-block: 0.125rem;
+    padding-inline: 1.5rem;
+    margin-block: .25rem;
+    border: .125rem white solid;
+    border-radius: .5rem;
+}
+button[type='submit']:hover{
+    background: #2c28ff;
+    color: white;
+    transition: all .2s;
+}

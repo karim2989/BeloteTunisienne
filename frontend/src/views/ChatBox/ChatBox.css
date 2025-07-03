@@ -1,0 +1,7 @@
+.chatbox{
+    box-sizing: border-box;
+    border: solid white .25rem;
+    width: 14rem;
+    flex-grow: 1;
+    margin-top: 1rem;
+}

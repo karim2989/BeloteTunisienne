@@ -1,0 +1,41 @@
+.scoreboard{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 14rem;
+    min-height: 6rem;
+    color: white;
+    border: .125rem solid white;
+    padding: .5rem;
+}
+.teamCircle{
+    margin-top: .25rem;
+    margin-right: .5rem;
+    width: .5rem;
+    height: .5rem;
+    border-radius: 50%;
+    background-color: gray;
+}
+.scoreboardRow{
+    display: flex;
+    flex-direction: row;
+}
+.flexfiller{
+    flex-grow: 1;
+}
+
+.team1{
+    background-color: #8F3BEB;
+}
+.team2{
+    background-color: #3B90EB;
+}
+
+.scoreboardTeamName{
+    font-size: xx-small;
+    margin: .125rem;
+    margin-right: .5rem;
+    padding-block: .025rem;
+    padding-inline: .75rem;
+    border-radius: .75rem;
+}

@@ -1,3 +1,5 @@
+/*  Shitty idea: no longer in use */
+
 import { Card, CardUtils } from './Card'
 import { Bid, BidType } from './Bid'
 
