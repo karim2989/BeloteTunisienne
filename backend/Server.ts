@@ -4,6 +4,7 @@ import User from "./User";
 import sanitizeHtml from 'sanitize-html';
 import { Bid } from "shared/src/Bid";
 import { Card } from "shared/src/Card";
+import Round, { RoundState } from "shared/src/Round";
 
 const MAX_ROOMS = 1000;
 let rooms: Map<number, Room> = new Map();
@@ -119,6 +120,14 @@ export function OnPlayRequest(auth: { username: string, password: number }, cont
 
     let r = rooms.get(users.get(auth.username)?.Room as number) as Room;
     if (r.CurrentRound.Play(r.Users.indexOf(auth.username), content.card)) {
+        if (r.CurrentRound.RoundState == RoundState.done) {
+            r.Scores[0] = r.Scores[2] = r.CurrentRound.Scores[0];
+            r.Scores[1] = r.Scores[3] = r.CurrentRound.Scores[1];
+            r.CurrentRound = new Round((r.CurrentRound.FirstPlayer + 1) % 4)
+            SyncBid(r.RoomNumber);
+        }
+        if (r.CurrentRound.Tricks)
+            console.log("current winning card " + r.CurrentRound.Tricks.at(-1)?.WinningPlayIndex);
         SyncScoreBoard(r.RoomNumber);
         SyncTable(r.RoomNumber);
         SyncHands(r.RoomNumber);

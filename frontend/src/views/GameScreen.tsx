@@ -26,6 +26,13 @@ const unicodeCardColors = new Map<string, string>([
     ["1D", "red"], ["7D", "red"], ["8D", "red"], ["9D", "red"], ["XD", "red"], ["VD", "red"], ["QD", "red"], ["KD", "red"]
 ]);
 
+const suitSymbols = new Map<Card, string>([
+    [CardUtils.Spade, "♠"],
+    [CardUtils.Club, "♣"],
+    [CardUtils.Heart, "♥"],
+    [CardUtils.Diamond, "♦"],
+]);
+
 export default function GameScreen(): ReactNode {
     const [hand, setHand] = useState<Deck>(DeckUtils.None)
     const [table, setTable] = useState<Card[]>([])
@@ -58,7 +65,7 @@ export default function GameScreen(): ReactNode {
                             {bid.Surcontree && <span> SURCONTREEEE</span>}
                             {bid.Surmanchee && <span> SURMANCHEEEE</span>}
                             <br />
-                            <span>bid trump: {bid.Trump}</span><br />
+                            <span>bid trump: {suitSymbols.get(bid.Trump)}</span><br />
                             <span>bid value: {bid.Value}</span>
                         </>
                     ) : (
@@ -79,7 +86,7 @@ export default function GameScreen(): ReactNode {
                     <br />
                     {DeckUtils.ToString(hand).split(' ').map((e, i) =>
                         <>
-                            <span key={99+i} onClick={() => RequestPlay(CardUtils.FromString(e))} className={"card handcard " + unicodeCardColors.get(e)}>{unicodeChars.get(e)}</span>
+                            <span key={99 + i} onClick={() => RequestPlay(CardUtils.FromString(e))} className={"card handcard " + unicodeCardColors.get(e)}>{unicodeChars.get(e)}</span>
                         </>
                     )}
                 </div>

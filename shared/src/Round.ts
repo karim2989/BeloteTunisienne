@@ -3,7 +3,7 @@ import { Card, CardUtils } from "./Card";
 import { Deck, DeckUtils } from "./Deck";
 import Trick from "./Trick";
 
-enum RoundState { bidphase, inbetweenphase, playphase, done }
+export enum RoundState { bidphase, inbetweenphase, playphase, done }
 
 export default class Round {
     private firstplayer: number;
@@ -17,6 +17,7 @@ export default class Round {
     private tricks: Array<Trick> = [];
     private scores: Int32Array = new Int32Array(2);
 
+    public get FirstPlayer(): number { return this.firstplayer }
     public get CurrentPlayer(): number { return this.currentPlayer }
     public get RoundState(): RoundState { return this.roundState; }
     public get CurrentBid(): Bid { return this.currentBid; }
