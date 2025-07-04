@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import cors from "cors"
 import { WebSocketServer } from 'ws';
-import { OnRequestConnectOrReconnect, OnRequestRoom } from './Server';
+import { OnMessageRequest, OnRequestConnectOrReconnect, OnRequestRoom } from './Server';
 
 const app: Express = express();
 const port = process.env.PORT || 4000;
@@ -36,7 +36,11 @@ wss.on('connection', function connection(ws) {
                     content = obj.content as { roomType: "create" | "join" | "auto", roomNumber: number }
                     OnRequestRoom(obj.auth, content)
                     break;
-                default:break;
+                case "message request":
+                    content = obj.content as { message: string }
+                    OnMessageRequest(obj.auth,content);
+                    break;
+                default: break;
             }
         }
         catch (e) { console.error(e); }

@@ -13,6 +13,7 @@
     "@types/ws": "^8.5.13",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "sanitize-html": "^2.17.0",
     "shared": "file:../shared",
     "tsx": "^4.19.2",
     "ws": "^8.18.0"

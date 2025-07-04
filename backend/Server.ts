@@ -1,6 +1,7 @@
 import WebSocket from "ws";
 import Room from "./Room";
 import User from "./User";
+import sanitizeHtml from 'sanitize-html';
 
 const MAX_ROOMS = 1000;
 let rooms: Map<number, Room> = new Map();
@@ -13,20 +14,25 @@ function _auth(auth: { username: string, password: number }): boolean {
 
 
 export function OnRequestConnectOrReconnect(username: string, password: number, ws: WebSocket) {
+    if (username != sanitizeHtml(username)) { console.log("username rejected: " + username);; return; }
     if (users.has(username)) { // reconnection:
         if (users.get(username)?.Password != password)
             ws.send(JSON.stringify({ cmd: "connection declined", roomid: users.get(username)?.Room }));
         else {
+            let u = users.get(username) as User
+            u.Ws = ws;
+            users.set(username, u);
             ws.send(JSON.stringify({ cmd: "connection accepted", content: undefined }));
             console.log("player reconnected: " + username);
-            if (users.get(username)?.Room != null) {// has room
-                let room = rooms.get(users.get(username)?.Room as number)
+            if (u.Room != null) {// has room
+                let room = rooms.get(u.Room as number)
                 ws.send(JSON.stringify(
                     {
                         cmd: "room accepted",
                         content: { indexInRoom: room?.Users.indexOf(username), roomNumber: room?.RoomNumber }
                     }
                 ))
+                SyncScoreBoard(room?.RoomNumber as number);
             }
         }
     }
@@ -42,6 +48,8 @@ export function OnRequestRoom(auth: { username: string, password: number }, cont
     if (!_auth(auth)) { console.log("auth failed"); return; }
 
     let roomNumber = content.roomNumber;
+    ///@ts-ignore
+    if (typeof content.roomNumber == 'string') roomNumber = Number.parseInt(roomNumber);
     if (content.roomType == 'create') {
         let attempts = 5;
         do {
@@ -51,28 +59,69 @@ export function OnRequestRoom(auth: { username: string, password: number }, cont
         if (attempts <= 0)
             return;// just gives up
         rooms.set(roomNumber, new Room(roomNumber));
-    }    
-    let room = rooms.get(roomNumber);
-    room?.AddUser(auth.username);
+        console.log("new room created:", roomNumber);
+    }
+
+    let r = rooms.get(roomNumber) as Room
+    if (r?.Users.indexOf(auth.username) == -1)
+        r?.AddUser(auth.username);
     let u = users.get(auth.username) as User;
     u.Room = roomNumber
     users.set(auth.username, u);
-    
+    rooms.set(roomNumber, r);
+
     (u.Ws as WebSocket).send(JSON.stringify(
         {
             cmd: "room accepted",
-            content: { indexInRoom: room?.Users.indexOf(auth.username), roomNumber: roomNumber }
+            content: { indexInRoom: r?.Users.indexOf(auth.username), roomNumber: roomNumber }
         }
     ));
-    /*
-    let usernameLengths = new Uint8Array(4);
-    let usernames = new Array<string>();
-    for (let i = 0; i < (room?.userCount as number); i++) {
-        let u = users.get(room?.Users[i] as number);
-        usernameLengths[i] = u?.Username.length as number;
-        usernames.push(u?.Username as string);
-    }
+    SyncScoreBoard(roomNumber);
+    SyncHands(roomNumber);
+}
 
-    room?.Users.forEach(u => users.get(u)?.Ws.send(SerializeSyncScoreboard(usernameLengths,usernames,room.Scoreboard)));
-*/
+export function SyncScoreBoard(roomId: number): void {
+    let r = rooms.get(roomId) as Room;
+    r.Users.forEach(u =>
+        users.get(u)?.Ws?.send(
+            JSON.stringify({
+                cmd: "scoreboard sync",
+                content: {
+                    users: r.Users,
+                    teams: r.Teams,
+                    scores: r.Scores,
+                    currentPlayerIndex: r.CurrentRound.CurrentPlayer
+                }
+            })
+        )
+    );
+}
+
+export function SyncHands(roomId: number): void {
+    let r = rooms.get(roomId) as Room;
+    r.Users.forEach(u =>
+        users.get(u)?.Ws?.send(
+            JSON.stringify({
+                cmd: "hand sync",
+                content: {
+                    hand: r.CurrentRound.Hands[r.Users.indexOf(u)]
+                }
+            })
+        )
+    );
+}
+
+export function OnMessageRequest(auth: { username: string, password: number }, content: { message: string }) {
+    if (!_auth(auth)) { console.log("auth failed"); return; }
+
+    let roomNumber = users.get(auth.username)?.Room as number;
+    rooms.get(roomNumber)?.Users.forEach((u) => {
+        let ws = users.get(u)?.Ws;
+        if (ws && ws.OPEN)
+            ws.send(JSON.stringify(
+                {
+                    cmd: "message recived",
+                    content: { sender: auth.username, message: sanitizeHtml(content.message) }
+                }))
+    })
 }

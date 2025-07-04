@@ -30,12 +30,12 @@ function App() {
         <div className='flexfiller'></div>
         {
           isConnected ?
-            <div id='disconnectbutton'>Disconnect</div>
+            <div id='disconnectbutton' style={{ display: "none" }}>Disconnect</div>
             : ""
         }
       </footer>
       <main>
-        {isConnected ? isInRoom ? <GameScreen/> : <RoomSelection /> : <LoginScreen />}
+        {isConnected ? isInRoom ? <GameScreen /> : <RoomSelection /> : <LoginScreen />}
       </main>
     </div>
   )

@@ -16,8 +16,8 @@ export abstract class CardUtils {
 
 
     public static readonly Heart = 0x00_00_00_ff;
-    public static readonly Diamond = 0x00_00_ff_00;
-    public static readonly Spade = 0x00_ff_00_00;
+    public static readonly Spade = 0x00_00_ff_00;
+    public static readonly Diamond = 0x00_ff_00_00;
     public static readonly Club = 0xff_00_00_00;
 
 
@@ -62,8 +62,8 @@ export abstract class CardUtils {
         if ((card & (card - 1)) != 0) throw 'the fnction [Suit(card: Card): number] does not accept decks';
 
         if (card & CardUtils.Heart) return CardUtils.Heart;
-        else if (card & CardUtils.Diamond) return CardUtils.Diamond;
         else if (card & CardUtils.Spade) return CardUtils.Spade;
+        else if (card & CardUtils.Diamond) return CardUtils.Diamond;
         else if (card & CardUtils.Club) return CardUtils.Club;
 
         throw new Error("invalid input " + card);
@@ -74,8 +74,8 @@ export abstract class CardUtils {
 
         switch (CardUtils.Suit(card)) {
             case CardUtils.Heart: return card;
-            case CardUtils.Diamond: return card >>> 8;
-            case CardUtils.Spade: return card >>> 16;
+            case CardUtils.Spade: return card >>> 8;
+            case CardUtils.Diamond: return card >>> 16;
             case CardUtils.Club: return card >>> 24;
 
             default: throw "invalid input " + card;

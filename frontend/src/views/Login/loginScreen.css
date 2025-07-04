@@ -2,8 +2,8 @@ form {
     color: white;
 }
 
-input[type='text'],
-input[type='password'] {
+label [type='text'],
+label input[type='password'] {
     border-radius: .5rem;
     background-color: #00000000;
     border: .125rem solid white;

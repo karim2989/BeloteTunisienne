@@ -1,3 +1,5 @@
+import type { Deck } from "../../shared/src/Deck";
+
 let isOpen = false;
 let isConnected = false;
 let isInRoom = false;
@@ -7,6 +9,9 @@ export abstract class ExternalHooks {
     public static OnConnectOrDisconnect: ((isConnected: boolean) => void)[] = [];
     public static OnEnterOrLeaveRoom: ((isInRoom: boolean) => void)[] = [];
     public static OnMessageRecived: ((sender: string, message: string) => void)[] = [];
+
+    public static OnSyncScoreboard: ((teams: (-1 | 0 | 1)[], users: string[], scores: number[], currentPlayerIndex: number) => void)[] = [];
+    public static OnSyncHand: ((hand: Deck) => void)[] = [];
 }
 
 let auth_username: string = ""
@@ -38,7 +43,6 @@ function openWebSocket() {
     }
     ws.onmessage = (msg) => {
         let obj: { cmd: string, content: object } = JSON.parse(msg.data);
-        let content;
         console.log(obj);
 
         switch (obj.cmd) {
@@ -48,10 +52,27 @@ function openWebSocket() {
                 break;
             case "room accepted":
                 isInRoom = true;
-                content = obj.content as { indexInRoom: number, roomNumber: number }
-                auth_room = content.roomNumber;
-                auth_inRoomIndex = content.indexInRoom;
+                let content_ra = obj.content as { indexInRoom: number, roomNumber: number }
+                auth_room = content_ra.roomNumber;
+                auth_inRoomIndex = content_ra.indexInRoom;
                 ExternalHooks.OnEnterOrLeaveRoom.forEach(e => e(true));
+                break;
+            case "message recived":
+                let content_mr = obj.content as { sender: string, message: string }
+                ExternalHooks.OnMessageRecived.forEach(e => e(content_mr.sender, content_mr.message))
+                break;
+            case "scoreboard sync":
+                let content_ss = obj.content as { teams: (-1 | 0 | 1)[], users: string[], scores: number[], currentPlayerIndex: number }
+                auth_inRoomIndex = content_ss.users.indexOf(auth_username);
+                ExternalHooks.OnSyncScoreboard.forEach(e => e(content_ss.teams, content_ss.users, content_ss.scores, content_ss.currentPlayerIndex));
+                if (ExternalHooks.OnSyncScoreboard.length == 0)
+                    setTimeout(() => { ExternalHooks.OnSyncScoreboard.forEach(e => e(content_ss.teams, content_ss.users, content_ss.scores, content_ss.currentPlayerIndex)); }, 100);
+                break;
+            case "hand sync":
+                let content_hs = obj.content as { hand: Deck }
+                ExternalHooks.OnSyncHand.forEach((e) => e(content_hs.hand));
+                if (ExternalHooks.OnSyncHand.length == 0)
+                    setTimeout(() => { ExternalHooks.OnSyncHand.forEach((e) => e(content_hs.hand)); }, 100);
                 break;
             default:
                 break;
@@ -78,12 +99,12 @@ export function RequestRoom(type: "create" | "join" | "auto", roomNumber: number
     ))
 }
 
-export function RequestMessage(message:string):void{
+export function RequestMessage(message: string): void {
     ws.send(JSON.stringify(
         {
             cmd: "message request",
             auth: { username: auth_username, password: auth_pw },
-            content: { message:message }
+            content: { message: message }
         }
     ))
 }

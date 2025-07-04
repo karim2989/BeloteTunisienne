@@ -1,7 +1,49 @@
 .chatbox{
     box-sizing: border-box;
-    border: solid white .25rem;
+    border: solid white .125rem;
     width: 14rem;
     flex-grow: 1;
     margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+.messageBox{
+    display: flex;
+    flex-direction: row;
+}
+
+.messageBoxTextField::placeholder
+{
+    color: #ffffffc0;
+}
+.messageBoxTextField{
+    margin: 0;
+    width: 10rem;
+    background-color: transparent;
+    border: 0;
+    border-top: 0.125rem white solid;
+    color: white;
+}
+.messageBoxSendButton{
+    width: 3.5rem;
+    border: white solid 0.125rem;
+    border-bottom: 0; 
+    color: white;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.chatboxMessagesContainer{
+    padding: .5rem;
+    overflow-y: scroll;
+    height: 18rem;
+}
+
+.messageSender{
+    color: gold;
+    font-style: italic;
+}
+
+.messageText{
+    color: white;
 }

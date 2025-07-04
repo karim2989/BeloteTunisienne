@@ -1,6 +1,6 @@
 .app {
   width: max(100vw,400px);
-  height: max(100vh,400px);
+  min-height: max(100vh,400px);
   background-color: #2C28FF;
   display: flex;
   flex-direction: column-reverse;
