@@ -19,7 +19,7 @@ export default class Round {
 
     public get CurrentPlayer(): number { return this.currentPlayer }
     public get RoundState(): RoundState { return this.roundState; }
-    public get CurrentBid(): Bid { return this.CurrentBid; }
+    public get CurrentBid(): Bid { return this.currentBid; }
     public get Hands(): Int32Array { return this.hands; }
     public get Tricks(): Array<Trick> { return this.tricks; }
     public get Scores(): Int32Array { return this.scores; }

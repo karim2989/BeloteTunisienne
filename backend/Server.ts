@@ -2,6 +2,8 @@ import WebSocket from "ws";
 import Room from "./Room";
 import User from "./User";
 import sanitizeHtml from 'sanitize-html';
+import { Bid } from "shared/src/Bid";
+import { Card } from "shared/src/Card";
 
 const MAX_ROOMS = 1000;
 let rooms: Map<number, Room> = new Map();
@@ -33,6 +35,9 @@ export function OnRequestConnectOrReconnect(username: string, password: number, 
                     }
                 ))
                 SyncScoreBoard(room?.RoomNumber as number);
+                SyncBid(room?.RoomNumber as number);
+                SyncHands(room?.RoomNumber as number);
+                SyncTable(room?.RoomNumber as number);
             }
         }
     }
@@ -78,6 +83,8 @@ export function OnRequestRoom(auth: { username: string, password: number }, cont
     ));
     SyncScoreBoard(roomNumber);
     SyncHands(roomNumber);
+    SyncBid(roomNumber);
+    SyncTable(roomNumber);
 }
 
 export function SyncScoreBoard(roomId: number): void {
@@ -97,6 +104,42 @@ export function SyncScoreBoard(roomId: number): void {
     );
 }
 
+export function OnBidRequest(auth: { username: string, password: number }, content: { bid: Bid }) {
+    if (!_auth(auth)) { console.log("auth failed"); return; }
+
+    let r = rooms.get(users.get(auth.username)?.Room as number) as Room;
+    if (r.CurrentRound.Bid(content.bid)) {
+        SyncBid(r.RoomNumber);
+        SyncScoreBoard(r.RoomNumber);
+    }
+    else console.log("bid failed");
+}
+export function OnPlayRequest(auth: { username: string, password: number }, content: { card: Card }) {
+    if (!_auth(auth)) { console.log("auth failed"); return; }
+
+    let r = rooms.get(users.get(auth.username)?.Room as number) as Room;
+    if (r.CurrentRound.Play(r.Users.indexOf(auth.username), content.card)) {
+        SyncScoreBoard(r.RoomNumber);
+        SyncTable(r.RoomNumber);
+        SyncHands(r.RoomNumber);
+    }
+    else console.log("play failed");
+}
+
+export function SyncBid(roomId: number): void {
+    let r = rooms.get(roomId) as Room;
+    r.Users.forEach(u =>
+        users.get(u)?.Ws?.send(
+            JSON.stringify({
+                cmd: "bid sync",
+                content: {
+                    bid: r.CurrentRound.CurrentBid
+                }
+            })
+        )
+    );
+}
+
 export function SyncHands(roomId: number): void {
     let r = rooms.get(roomId) as Room;
     r.Users.forEach(u =>
@@ -105,6 +148,24 @@ export function SyncHands(roomId: number): void {
                 cmd: "hand sync",
                 content: {
                     hand: r.CurrentRound.Hands[r.Users.indexOf(u)]
+                }
+            })
+        )
+    );
+}
+export function SyncTable(roomId: number): void {
+    let r = rooms.get(roomId) as Room;
+    let cards: Card[] = []
+    r.CurrentRound.Tricks.at(-1)?.Cards.forEach(e => {
+        cards.push(e as Card);
+    });
+
+    r.Users.forEach(u =>
+        users.get(u)?.Ws?.send(
+            JSON.stringify({
+                cmd: "table sync",
+                content: {
+                    deck: cards
                 }
             })
         )
@@ -125,3 +186,4 @@ export function OnMessageRequest(auth: { username: string, password: number }, c
                 }))
     })
 }
+

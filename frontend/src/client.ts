@@ -1,4 +1,6 @@
+import type { Bid } from "shared/src/Bid";
 import type { Deck } from "../../shared/src/Deck";
+import type { Card } from "shared/src/Card";
 
 let isOpen = false;
 let isConnected = false;
@@ -12,15 +14,20 @@ export abstract class ExternalHooks {
 
     public static OnSyncScoreboard: ((teams: (-1 | 0 | 1)[], users: string[], scores: number[], currentPlayerIndex: number) => void)[] = [];
     public static OnSyncHand: ((hand: Deck) => void)[] = [];
+    public static OnSyncBid: ((bid: Bid) => void)[] = [];
+    public static OnSyncTable: ((table: Card[]) => void)[] = [];
 }
 
 let auth_username: string = ""
 let auth_room: number = 0
 let auth_pw: number = 0
 let auth_inRoomIndex: number = -1
+let nameboard: string[] = []
 
 export function getUsername(): string { return auth_username; }
 export function getRoomId(): number { return auth_room; }
+export function getInRoomIndex(): number { return auth_inRoomIndex; }
+export function getNameboard(): string[] { return nameboard; }
 
 let ws: WebSocket;
 
@@ -64,6 +71,7 @@ function openWebSocket() {
             case "scoreboard sync":
                 let content_ss = obj.content as { teams: (-1 | 0 | 1)[], users: string[], scores: number[], currentPlayerIndex: number }
                 auth_inRoomIndex = content_ss.users.indexOf(auth_username);
+                nameboard = content_ss.users;
                 ExternalHooks.OnSyncScoreboard.forEach(e => e(content_ss.teams, content_ss.users, content_ss.scores, content_ss.currentPlayerIndex));
                 if (ExternalHooks.OnSyncScoreboard.length == 0)
                     setTimeout(() => { ExternalHooks.OnSyncScoreboard.forEach(e => e(content_ss.teams, content_ss.users, content_ss.scores, content_ss.currentPlayerIndex)); }, 100);
@@ -74,6 +82,19 @@ function openWebSocket() {
                 if (ExternalHooks.OnSyncHand.length == 0)
                     setTimeout(() => { ExternalHooks.OnSyncHand.forEach((e) => e(content_hs.hand)); }, 100);
                 break;
+            case "bid sync":
+                let content_bs = obj.content as { bid: Bid }
+                ExternalHooks.OnSyncBid.forEach((e) => e(content_bs.bid));
+                if (ExternalHooks.OnSyncBid.length == 0)
+                    setTimeout(() => { ExternalHooks.OnSyncBid.forEach((e) => e(content_bs.bid)); }, 100);
+                break;
+            case "table sync":
+                let content_ts = obj.content as { deck: Card[] }
+                ExternalHooks.OnSyncTable.forEach((e) => e(content_ts.deck));
+                if (ExternalHooks.OnSyncTable.length == 0)
+                    setTimeout(() => { ExternalHooks.OnSyncTable.forEach((e) => e(content_ts.deck)); }, 100);
+                break;
+
             default:
                 break;
         }
@@ -109,6 +130,25 @@ export function RequestMessage(message: string): void {
     ))
 }
 
+export function RequestBid(bid: Bid): void {
+    ws.send(JSON.stringify(
+        {
+            cmd: "bid request",
+            auth: { username: auth_username, password: auth_pw },
+            content: { bid: bid }
+        }
+    ))
+}
+
+export function RequestPlay(card: Card) {
+    ws.send(JSON.stringify(
+        {
+            cmd: "play request",
+            auth: { username: auth_username, password: auth_pw },
+            content: { card: card }
+        }
+    ))
+}
 
 function xorHash(bytes: Uint8Array): number {
     let hash = 0;

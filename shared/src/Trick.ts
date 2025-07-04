@@ -69,7 +69,7 @@ export default class Trick {
 
         // has no lead cards + team not winning the trick + has trump card(s) => must ruff
 
-        if (CardUtils.Suit(card) != CardUtils.Suit(this.trump))// did not ruff => illegal
+        if (CardUtils.Suit(card) != this.trump)// did not ruff => illegal
             return { value: false, error: "must ruff" };
 
         if (isWrongfullyUnderRuffing(card, hand, this.trump, this.cards[this.winningPlayIndex])) // choose to underruff => illegal

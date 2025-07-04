@@ -39,3 +39,11 @@
     padding-inline: .75rem;
     border-radius: .75rem;
 }
+
+.scoreboardCurrentPlayer{
+    animation: flashingText .5s infinite;
+}
+@keyframes flashingText {
+    0%, 100% { color: gold; }
+    50% { color: white; }
+}

@@ -1,7 +1,9 @@
 import express, { Express, Request, Response } from 'express';
 import cors from "cors"
 import { WebSocketServer } from 'ws';
-import { OnMessageRequest, OnRequestConnectOrReconnect, OnRequestRoom } from './Server';
+import { OnBidRequest, OnMessageRequest, OnPlayRequest, OnRequestConnectOrReconnect, OnRequestRoom } from './Server';
+import { Bid } from 'shared/src/Bid';
+import { Card } from 'shared/src/Card';
 
 const app: Express = express();
 const port = process.env.PORT || 4000;
@@ -38,7 +40,15 @@ wss.on('connection', function connection(ws) {
                     break;
                 case "message request":
                     content = obj.content as { message: string }
-                    OnMessageRequest(obj.auth,content);
+                    OnMessageRequest(obj.auth, content);
+                    break;
+                case "bid request":
+                    content = obj.content as { bid: Bid }
+                    OnBidRequest(obj.auth, content);
+                    break;
+                case "play request":
+                    content = obj.content as { card: Card }
+                    OnPlayRequest(obj.auth, content);
                     break;
                 default: break;
             }

@@ -1,3 +1,5 @@
+import { trace } from "node:console";
+
 export type Card = number;
 
 export abstract class CardUtils {
@@ -59,7 +61,7 @@ export abstract class CardUtils {
 
 
     public static Suit(card: Card): number {
-        if ((card & (card - 1)) != 0) throw 'the fnction [Suit(card: Card): number] does not accept decks';
+        if ((card & (card - 1)) != 0) throw 'the fnction [Suit(card: Card): number] does not accept decks' + card;
 
         if (card & CardUtils.Heart) return CardUtils.Heart;
         else if (card & CardUtils.Spade) return CardUtils.Spade;

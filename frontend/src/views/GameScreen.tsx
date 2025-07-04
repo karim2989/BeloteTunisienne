@@ -2,8 +2,11 @@ import { useEffect, useState, type ReactNode } from "react";
 import ScoreBoard from "./Scoreboard/ScoreBoard";
 import "./gamescreen.css"
 import ChatBox from "./ChatBox/ChatBox";
-import { ExternalHooks } from "../client";
+import { ExternalHooks, getNameboard, RequestPlay } from "../client";
 import { DeckUtils, type Deck } from "../../../shared/src/Deck";
+import BiddingArea from "./BiddingArea/BiddingArea";
+import { Bid } from "shared/src/Bid";
+import { CardUtils, type Card } from "shared/src/Card";
 
 
 const unicodeChars = new Map<string, string>([
@@ -25,11 +28,19 @@ const unicodeCardColors = new Map<string, string>([
 
 export default function GameScreen(): ReactNode {
     const [hand, setHand] = useState<Deck>(DeckUtils.None)
+    const [table, setTable] = useState<Card[]>([])
+    const [bid, setBid] = useState<Bid>();
     useEffect(() => {
         ExternalHooks.OnSyncHand.push((h) => {
             setHand(h);
         })
-    })
+        ExternalHooks.OnSyncBid.push((b) => {
+            setBid(b);
+        })
+        ExternalHooks.OnSyncTable.push((d) => {
+            setTable(d);
+        })
+    }, [])
     return (
         <>
             <aside>
@@ -39,18 +50,36 @@ export default function GameScreen(): ReactNode {
             <div className='flexfiller leftaside'>
                 <div className="bidInfo square">
                     <span>bid info</span><br />
-                    <span>bid player: Evilsailor</span><br />
-                    <span>bid type: annonce</span> <span>SURCONTREEEE</span><br />
-                    <span>bid trump: ♣</span><br />
-                    <span>bid value: 120</span>
+                    {bid ? (
+                        <>
+                            <span>bid player: {getNameboard()[bid.Player]}</span><br />
+                            <span>bid type: {bid.Type}</span>
+                            {bid.Contree && <span> CONTREEEE</span>}
+                            {bid.Surcontree && <span> SURCONTREEEE</span>}
+                            {bid.Surmanchee && <span> SURMANCHEEEE</span>}
+                            <br />
+                            <span>bid trump: {bid.Trump}</span><br />
+                            <span>bid value: {bid.Value}</span>
+                        </>
+                    ) : (
+                        <span>No bid yet</span>
+                    )}
                 </div>
-                <div className=" square">variable area</div>
+                <div className=" square">variable area
+                    {!table || table.length == 0 ? <BiddingArea /> :
+                        table.filter(e => e > 0).map((e, i) =>
+                            <span key={i} className={"card " + unicodeCardColors.get(CardUtils.ToString(e))}>
+                                {unicodeChars.get(CardUtils.ToString(e))}
+                            </span>
+                        )
+                    }
+                </div>
                 <div className="hand rectangle">
                     <span>your hand</span>
                     <br />
                     {DeckUtils.ToString(hand).split(' ').map((e, i) =>
                         <>
-                            <span key={i} about={e} className={"card handcard " + unicodeCardColors.get(e)}>{unicodeChars.get(e)}</span>
+                            <span key={99+i} onClick={() => RequestPlay(CardUtils.FromString(e))} className={"card handcard " + unicodeCardColors.get(e)}>{unicodeChars.get(e)}</span>
                         </>
                     )}
                 </div>
