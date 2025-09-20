@@ -139,7 +139,7 @@ export abstract class CardUtils {
     public static Compare(card1: Card, card2: Card, Trump: Card): boolean {
         if (CardUtils.IsSuit(card1, Trump) && !CardUtils.IsSuit(card2, Trump)) return true;
         else if (!CardUtils.IsSuit(card1, Trump) && CardUtils.IsSuit(card2, Trump)) return false;
-        else if (CardUtils.IsSuit(card1, Trump)) {
+        else if ((card1 & Trump) != 0) {
             let [v1, v2] = [CardUtils.TrumpValue(card1), CardUtils.TrumpValue(card2)]
             if (v1 == v2) return card1 > card2
             else return v1 > v2

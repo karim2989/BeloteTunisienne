@@ -105,7 +105,7 @@ export default class Round {
     }
 
     public Play(player: number, card: Card): boolean {
-        if (player != this.currentPlayer)
+        if (this.roundState == RoundState.bidphase || player != this.currentPlayer)
             return false;
 
         if (this.roundState == RoundState.inbetweenphase)

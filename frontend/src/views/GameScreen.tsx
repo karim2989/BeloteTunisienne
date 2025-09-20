@@ -5,6 +5,7 @@ import ChatBox from "./ChatBox/ChatBox";
 import { ExternalHooks, getNameboard, RequestPlay } from "../client";
 import { DeckUtils, type Deck } from "../../../shared/src/Deck";
 import BiddingArea from "./BiddingArea/BiddingArea";
+import BidDial from "./BidDial/BidDial.tsx";
 import { Bid } from "shared/src/Bid";
 import { CardUtils, type Card } from "shared/src/Card";
 
@@ -57,16 +58,16 @@ export default function GameScreen(): ReactNode {
             <div className='flexfiller leftaside'>
                 <div className="bidInfo square">
                     <span>bid info</span><br />
+                    <BidDial/>
                     {bid ? (
                         <>
-                            <span>bid player: {getNameboard()[bid.Player]}</span><br />
-                            <span>bid type: {bid.Type}</span>
+                            <span>bid player: {getNameboard()[bid.Player]}</span> --- 
+                            <span> bid type: {bid.Type}</span>
                             {bid.Contree && <span> CONTREEEE</span>}
                             {bid.Surcontree && <span> SURCONTREEEE</span>}
-                            {bid.Surmanchee && <span> SURMANCHEEEE</span>}
-                            <br />
-                            <span>bid trump: {suitSymbols.get(bid.Trump)}</span><br />
-                            <span>bid value: {bid.Value}</span>
+                            {bid.Surmanchee && <span> SURMANCHEEEE</span>} --- 
+                            <span> bid trump: {suitSymbols.get(bid.Trump)}</span> ---  
+                            <span> bid value: {bid.Value}</span>
                         </>
                     ) : (
                         <span>No bid yet</span>

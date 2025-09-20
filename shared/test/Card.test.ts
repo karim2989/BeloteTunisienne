@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import {CardUtils} from '../src/Card';
-import {DeckUtils} from '../src/Deck';
+import { CardUtils } from '../src/Card';
+import { DeckUtils } from '../src/Deck';
 
 describe('Card', () => {
     describe('Count', () => {
@@ -98,5 +98,14 @@ describe('Card', () => {
             const deck2 = DeckUtils.Union(CardUtils.KingOfHearts, CardUtils.TenOfHearts);
             assert.strictEqual(DeckUtils.Count(DeckUtils.Union(deck1, deck2)), 3);
         });
+    });
+    describe('deck comparison', () => {
+        assert.strictEqual(CardUtils.IsSuit(CardUtils.ValetOfClubs, CardUtils.Club), true);
+        assert.strictEqual(CardUtils.IsSuit(CardUtils.ValetOfClubs, CardUtils.Diamond), false);
+        assert.strictEqual(CardUtils.IsSuit(CardUtils.ValetOfClubs, DeckUtils.All), true);
+        assert.strictEqual(CardUtils.IsSuit(CardUtils.ValetOfClubs, DeckUtils.None), false);
+
+        assert.strictEqual(CardUtils.Compare(CardUtils.QueenOfHearts, CardUtils.NineOfClubs, DeckUtils.None), true);
+        assert.strictEqual(CardUtils.Compare(CardUtils.QueenOfHearts, CardUtils.NineOfClubs, DeckUtils.All), false);
     });
 });
