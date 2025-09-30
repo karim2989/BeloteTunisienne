@@ -1,13 +1,15 @@
 import type { ReactNode } from "react";
-import { Bid } from "shared/src/bid";
+import { Bid, BidType } from "shared/src/bid";
 import BidDial from "../BidDial/BidDial";
 import { CardUtils, type Card } from "shared/src/Card";
-import { getNameboard } from "../../client";
+// import { getNameboard } from "../../client";
 import { DeckUtils } from "shared/src/Deck";
 import "./CombinedBiddingStatusArea.css";
+import SuitSelector from "./SuitSelector";
 interface CombinedBiddingStatusAreaProps {
-    bid?: Bid;
-    setbid: (bid: Bid) => void;
+    currentBid?: Bid;
+    wantedBid?: Bid;
+    setWantedBid: (bid: Bid) => void;
 }
 export const SUIT_UNICODE: Record<Card | string, string> = {
     [CardUtils.Heart]: "♥",
@@ -22,45 +24,66 @@ export default function CombinedBiddingStatusArea(prop: CombinedBiddingStatusAre
     return <>
         <div className="bidInfo square">
             <span>bid info</span><br />
-            
+
             <BidDial
-                currentSuit={prop.bid?.Trump as Card}
-                currentValue={prop.bid?.Value as number}
+                currentSuit={prop.currentBid?.Trump as Card}
+                currentValue={prop.currentBid?.Value as number}
                 // @ts-ignore
-                currentTeam={((prop.bid?.Player as number) % 2) + 1} />
+                currentTeam={((prop.currentBid?.Player as number) % 2) + 1}
+                OnSetValue={(value) => {
+                    if (!prop.wantedBid) return;
+                    const currentBid = prop.wantedBid as Bid;
+                    prop.setWantedBid({ ...currentBid, Value: value } as Bid);
+                }}
+            />
 
 
-                <div className="suitRow">
-                    {([CardUtils.Heart, CardUtils.Diamond, CardUtils.Club, CardUtils.Spade, DeckUtils.None, DeckUtils.All] as Card[]).map((suit) => {
-                        const selected = prop.bid?.Trump === suit;
-                        return (
-                            <span
-                                key={suit}
-                                onClick={() => {
-                                    if (!prop.bid) return;
-                                    const currentBid = prop.bid as Bid;
-                                    prop.setbid({ ...currentBid, Trump: suit } as Bid);
-                                }}
-                                className={`suitOption${selected ? " selected" : ""}`}
-                                aria-label={SUIT_UNICODE[suit]}
-                                tabIndex={0}
-                                onKeyDown={e => {
-                                    if (e.key === "Enter" || e.key === " ") {
-                                        if (!prop.bid) return;
-                                        const currentBid = prop.bid as Bid;
-                                        prop.setbid({ ...currentBid, Trump: suit } as Bid);
-                                    }
-                                }}
-                                role="button"
-                            >
-                                {SUIT_UNICODE[suit]}
-                            </span>
-                        );
-                    })}
-                </div>
+            <SuitSelector
+                isKaputOrAbove={!!prop.wantedBid && prop.wantedBid.Value >= 190}
+                onSelect={(suit) => {
+                    if (!prop.wantedBid) return;
+                    const currentBid = prop.wantedBid as Bid;
+                    prop.setWantedBid({ ...currentBid, Trump: suit } as Bid);
+                }}
+            />
 
-            // backup bid stats:
-            {prop.bid ? (
+
+            <div className="bidActions">
+                <button className="bidBtn bidBtn-pass"
+                    onClick={() => {
+                        if (!prop.wantedBid) return;
+                        const currentBid = prop.wantedBid as Bid;
+                        prop.setWantedBid({ ...currentBid, Type: BidType.pass, Value: NaN, Trump: NaN } as Bid);
+                    }}
+                >
+                    pass
+                </button>
+                <button className="bidBtn bidBtn-annonce"
+                    onClick={() => {
+                        if (!prop.wantedBid) return;
+                        const currentBid = prop.wantedBid as Bid;
+                        const v = currentBid.Value;
+                        const nextType = v >= 200 ? BidType.kaputgeneral : v >= 190 ? BidType.kaput : BidType.annonce;
+                        prop.setWantedBid({ ...currentBid, Type: nextType } as Bid);
+                    }}
+                >
+                    annonce
+                </button>
+                <button className="bidBtn bidBtn-severe"
+                    onClick={() => {
+                        if (!prop.wantedBid) return;
+                        const currentBid = prop.wantedBid as Bid;
+                        const isSevere = prop.currentBid?.IsSevere ?? false;
+                        const nextType = isSevere ? BidType.surcontre : BidType.contre;
+                        prop.setWantedBid({ ...currentBid, Type: nextType, Value: NaN } as Bid);
+                    }}
+                >
+                    contre/surcontre
+                </button>
+            </div>
+
+
+            {/*prop.bid ? (
                 <>
                     <span>bid player: {getNameboard()[prop.bid.Player]}</span> ---
                     <span> bid type: {prop.bid.Type}</span>
@@ -72,7 +95,7 @@ export default function CombinedBiddingStatusArea(prop: CombinedBiddingStatusAre
                 </>
             ) : (
                 <span>No bid yet</span>
-            )}
+            )*/}
         </div>
     </>
 }

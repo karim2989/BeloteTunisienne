@@ -5,7 +5,7 @@ import ChatBox from "./ChatBox/ChatBox";
 import { ExternalHooks, getNameboard, RequestPlay } from "../client";
 import { DeckUtils, type Deck } from "../../../shared/src/Deck";
 import BiddingArea from "./BiddingArea/BiddingArea";
-import { Bid } from "shared/src/Bid";
+import { Bid, BidType } from "shared/src/Bid";
 import { CardUtils, type Card } from "shared/src/Card";
 import CombinedBiddingStatusArea from "./CombinedBiddingStatusArea/CombinedBiddingStatusArea.tsx";
 
@@ -50,7 +50,7 @@ export default function GameScreen(): ReactNode {
                 <ChatBox />
             </aside>
             <div className='flexfiller leftaside'>
-                <CombinedBiddingStatusArea bid={currentBid} setbid={setWantedBid}/>
+                <CombinedBiddingStatusArea currentBid={currentBid} wantedBid={wantedBid} setWantedBid={setWantedBid}/>
                 <div className=" square">variable area
                     {!table || table.length == 0 ? <BiddingArea /> :
                         table.filter(e => e > 0).map((e, i) =>

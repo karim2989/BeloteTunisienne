@@ -8,6 +8,7 @@ interface BidDialProps {
     currentSuit: Card;
     currentValue: number;
     currentTeam: 1 | 2;
+    OnSetValue: (value: number) => void;
 }
 
 const DIAL_RADIUS = 60;
@@ -42,16 +43,15 @@ function getHandleAngleFromPosition(x: number, y: number): number {
 }
 
 const BidDial: React.FC<BidDialProps> = (BidDialProps: BidDialProps) => {
-    console.log('ngrpoign');
-    console.log(BidDialProps);
-    
-    
+
+
     const rachmaAngles = getRachmaAngles();
     const rachmaPositions = getRadialPositions(rachmaAngles, 16);
     const ballPositions = getRadialPositions(rachmaAngles, 0);
 
     const [handleAngle, setHandleAngle] = useState(0);
     const [dragging, setDragging] = useState(false);
+    let lastHandleValue = 0;
 
     const handleMouseDown = (e: React.MouseEvent<SVGPolygonElement, MouseEvent>) => {
         setDragging(true);
@@ -69,6 +69,12 @@ const BidDial: React.FC<BidDialProps> = (BidDialProps: BidDialProps) => {
         const roundedAngle = Math.round(angle / step) * step;
         if (roundedAngle >= -90 && roundedAngle <= 90)
             setHandleAngle(roundedAngle);
+
+        const currentHandleIndex = Math.round((handleAngle + 90) / step) * 10;
+        const currentHandleValue = currentHandleIndex == 0 ? 0 : Math.round((handleAngle + 90) / step) * 10 + 80;
+        if (lastHandleValue != currentHandleValue && BidDialProps.OnSetValue)
+            BidDialProps.OnSetValue(currentHandleValue);
+        lastHandleValue = currentHandleValue;
     };
 
     const handleMouseUp = () => setDragging(false);
