@@ -26,7 +26,6 @@ wss.on('connection', function connection(ws) {
     ws.on('message', (msg: string) => {
         try {
             let obj: { cmd: string, auth: { username: string, password: number }, content: object } = JSON.parse(msg);
-            console.log(obj);
 
             let content;
             switch (obj.cmd) {

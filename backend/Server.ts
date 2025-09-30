@@ -48,14 +48,48 @@ export function OnRequestConnectOrReconnect(username: string, password: number, 
         console.log("player connected: " + username);
     }
 
+    ws.onclose = () => {
+        if (users.has(username) && users.get(username)) {
+            const roomNumber = users.get(username)?.Room
+            if (!roomNumber) return;
+            const room = rooms.get(roomNumber) as Room;
+            let roomStillActive = false;
+
+            //@ts-ignore
+            room.Users.forEach((e) => {
+                //@ts-ignore
+                if (users.get(e).Ws?.readyState < WebSocket.CLOSING) roomStillActive = true;
+            })
+            if (!roomStillActive) {
+                room?.Users.forEach((e) => { users.delete(e) })
+                rooms.delete(roomNumber);
+                console.log("room ", roomNumber, " has been closed");
+            }
+        }
+    }
 }
 
 export function OnRequestRoom(auth: { username: string, password: number }, content: { roomType: "create" | "join" | "auto", roomNumber: number }) {
     if (!_auth(auth)) { console.log("auth failed"); return; }
+    
 
     let roomNumber = content.roomNumber;
     ///@ts-ignore
     if (typeof content.roomNumber == 'string') roomNumber = Number.parseInt(roomNumber);
+    if (content.roomType == 'auto') {
+        let roomItterator = rooms.entries().next();
+        let lookupSuccessfull = false;
+        while (!roomItterator.done) {
+            const r = rooms.get(roomItterator.value[0])
+            if (r)
+                if (r?.userCount < 4) {
+                    roomNumber = (r.RoomNumber) as number;
+                    lookupSuccessfull = true;
+                    break;
+                }
+        }
+        if(lookupSuccessfull == false) content.roomType ="create"
+    }
     if (content.roomType == 'create') {
         let attempts = 5;
         do {
@@ -69,6 +103,7 @@ export function OnRequestRoom(auth: { username: string, password: number }, cont
     }
 
     let r = rooms.get(roomNumber) as Room
+    if(!r) return; // requested  non existante room
     if (r?.Users.indexOf(auth.username) == -1)
         r?.AddUser(auth.username);
     let u = users.get(auth.username) as User;
