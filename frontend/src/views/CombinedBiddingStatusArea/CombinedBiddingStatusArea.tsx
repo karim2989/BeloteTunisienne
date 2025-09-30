@@ -30,20 +30,20 @@ export default function CombinedBiddingStatusArea(prop: CombinedBiddingStatusAre
                 break;
             case "annonce":
                 if(!prop.wantedBid) return;
-                console.log(prop.wantedBid);
                 if (prop.wantedBid.Value < 190)
                     bid = new Bid(getInRoomIndex(), BidType.annonce, prop.wantedBid.Trump, prop.wantedBid?.Value);
                 else if (prop.wantedBid.Value == 190)
                     bid = new Bid(getInRoomIndex(), BidType.kaput, prop.wantedBid.Trump);
                 else
-                bid = new Bid(getInRoomIndex(), BidType.kaputgeneral, prop.wantedBid.Trump);
+                bid = new Bid(getInRoomIndex(), BidType.kaputgeneral, prop.wantedBid.Trump ? prop.wantedBid.Trump:CardUtils.Heart);
                 break;
 
             default:
                 throw "contreeeee oisnt implemented yety"
                 break;
         }
-
+        console.log(bid);
+        
         RequestBid(bid);
     };
     return <>

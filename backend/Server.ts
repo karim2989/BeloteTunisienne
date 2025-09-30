@@ -185,7 +185,7 @@ export function SyncBid(roomId: number): void {
 }
 
 export function SyncHands(roomId: number): void {
-    let r = rooms.get(roomId) as Room;
+    let r = rooms.get(roomId) as Room;    
     r.Users.forEach(u =>
         users.get(u)?.Ws?.send(
             JSON.stringify({
