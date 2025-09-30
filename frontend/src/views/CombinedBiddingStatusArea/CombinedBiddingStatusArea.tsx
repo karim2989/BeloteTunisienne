@@ -29,14 +29,14 @@ export default function CombinedBiddingStatusArea(prop: CombinedBiddingStatusAre
                 bid = new Bid(getInRoomIndex(), BidType.pass);
                 break;
             case "annonce":
-                console.log("afaz");
                 if(!prop.wantedBid) return;
+                console.log(prop.wantedBid);
                 if (prop.wantedBid.Value < 190)
-                    bid = new Bid(getInRoomIndex(), BidType.annonce, prop.wantedBid?.Trump, prop.wantedBid?.Value);
+                    bid = new Bid(getInRoomIndex(), BidType.annonce, prop.wantedBid.Trump, prop.wantedBid?.Value);
                 else if (prop.wantedBid.Value == 190)
-                    bid = new Bid(getInRoomIndex(), BidType.kaput, prop.wantedBid?.Trump);
+                    bid = new Bid(getInRoomIndex(), BidType.kaput, prop.wantedBid.Trump);
                 else
-                    bid = new Bid(getInRoomIndex(), BidType.kaputgeneral, prop.wantedBid?.Trump);
+                bid = new Bid(getInRoomIndex(), BidType.kaputgeneral, prop.wantedBid.Trump);
                 break;
 
             default:
