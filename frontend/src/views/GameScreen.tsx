@@ -5,9 +5,9 @@ import ChatBox from "./ChatBox/ChatBox";
 import { ExternalHooks, getNameboard, RequestPlay } from "../client";
 import { DeckUtils, type Deck } from "../../../shared/src/Deck";
 import BiddingArea from "./BiddingArea/BiddingArea";
-import BidDial from "./BidDial/BidDial.tsx";
 import { Bid } from "shared/src/Bid";
 import { CardUtils, type Card } from "shared/src/Card";
+import CombinedBiddingStatusArea from "./CombinedBiddingStatusArea/CombinedBiddingStatusArea.tsx";
 
 
 const unicodeChars = new Map<string, string>([
@@ -27,23 +27,17 @@ const unicodeCardColors = new Map<string, string>([
     ["1D", "red"], ["7D", "red"], ["8D", "red"], ["9D", "red"], ["XD", "red"], ["VD", "red"], ["QD", "red"], ["KD", "red"]
 ]);
 
-const suitSymbols = new Map<Card, string>([
-    [CardUtils.Spade, "♠"],
-    [CardUtils.Club, "♣"],
-    [CardUtils.Heart, "♥"],
-    [CardUtils.Diamond, "♦"],
-]);
-
 export default function GameScreen(): ReactNode {
     const [hand, setHand] = useState<Deck>(DeckUtils.None)
     const [table, setTable] = useState<Card[]>([])
-    const [bid, setBid] = useState<Bid>();
+    const [currentBid, setCurrentBid] = useState<Bid>(new Bid(0,0));
+    const [wantedBid, setWantedBid] = useState<Bid>(new Bid(0,0));
     useEffect(() => {
         ExternalHooks.OnSyncHand.push((h) => {
             setHand(h);
         })
         ExternalHooks.OnSyncBid.push((b) => {
-            setBid(b);
+            setCurrentBid(b);
         })
         ExternalHooks.OnSyncTable.push((d) => {
             setTable(d);
@@ -56,23 +50,7 @@ export default function GameScreen(): ReactNode {
                 <ChatBox />
             </aside>
             <div className='flexfiller leftaside'>
-                <div className="bidInfo square">
-                    <span>bid info</span><br />
-                    <BidDial/>
-                    {bid ? (
-                        <>
-                            <span>bid player: {getNameboard()[bid.Player]}</span> --- 
-                            <span> bid type: {bid.Type}</span>
-                            {bid.Contree && <span> CONTREEEE</span>}
-                            {bid.Surcontree && <span> SURCONTREEEE</span>}
-                            {bid.Surmanchee && <span> SURMANCHEEEE</span>} --- 
-                            <span> bid trump: {suitSymbols.get(bid.Trump)}</span> ---  
-                            <span> bid value: {bid.Value}</span>
-                        </>
-                    ) : (
-                        <span>No bid yet</span>
-                    )}
-                </div>
+                <CombinedBiddingStatusArea bid={currentBid} setbid={setWantedBid}/>
                 <div className=" square">variable area
                     {!table || table.length == 0 ? <BiddingArea /> :
                         table.filter(e => e > 0).map((e, i) =>

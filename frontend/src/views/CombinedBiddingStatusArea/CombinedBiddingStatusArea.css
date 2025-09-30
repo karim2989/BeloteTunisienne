@@ -1,0 +1,21 @@
+.suitRow {
+  margin: 10px 0;
+  display: flex;
+  gap: 12px;
+}
+
+.suitOption {
+  width: 1rem;
+  height: 2rem;
+  cursor: pointer;
+  font-size: 24px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  user-select: none;
+  transition: border 0.2s, background 0.2s;
+}
+
+.suitOption.selected {
+  border: 2px solid white;
+}
