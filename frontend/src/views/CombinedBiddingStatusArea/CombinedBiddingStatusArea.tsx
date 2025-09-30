@@ -6,6 +6,7 @@ import { CardUtils, type Card } from "shared/src/Card";
 import { DeckUtils } from "shared/src/Deck";
 import "./CombinedBiddingStatusArea.css";
 import SuitSelector from "./SuitSelector";
+import { getInRoomIndex, RequestBid } from "../../client";
 interface CombinedBiddingStatusAreaProps {
     currentBid?: Bid;
     wantedBid?: Bid;
@@ -20,7 +21,31 @@ export const SUIT_UNICODE: Record<Card | string, string> = {
     [DeckUtils.None]: "∅",
 };
 export default function CombinedBiddingStatusArea(prop: CombinedBiddingStatusAreaProps): ReactNode {
+    const finalizeBid = (severity: 'passe' | 'annonce' | 'contre') => {
+        
+        let bid = prop.wantedBid;
+        switch (severity) {
+            case "passe":
+                bid = new Bid(getInRoomIndex(), BidType.pass);
+                break;
+            case "annonce":
+                console.log("afaz");
+                if(!prop.wantedBid) return;
+                if (prop.wantedBid.Value < 190)
+                    bid = new Bid(getInRoomIndex(), BidType.annonce, prop.wantedBid?.Trump, prop.wantedBid?.Value);
+                else if (prop.wantedBid.Value == 190)
+                    bid = new Bid(getInRoomIndex(), BidType.kaput, prop.wantedBid?.Trump);
+                else
+                    bid = new Bid(getInRoomIndex(), BidType.kaputgeneral, prop.wantedBid?.Trump);
+                break;
 
+            default:
+                throw "contreeeee oisnt implemented yety"
+                break;
+        }
+
+        RequestBid(bid);
+    };
     return <>
         <div className="bidInfo square">
             <span>bid info</span><br />
@@ -51,31 +76,21 @@ export default function CombinedBiddingStatusArea(prop: CombinedBiddingStatusAre
             <div className="bidActions">
                 <button className="bidBtn bidBtn-pass"
                     onClick={() => {
-                        if (!prop.wantedBid) return;
-                        const currentBid = prop.wantedBid as Bid;
-                        prop.setWantedBid({ ...currentBid, Type: BidType.pass, Value: NaN, Trump: NaN } as Bid);
+                        finalizeBid("passe")
                     }}
                 >
                     pass
                 </button>
                 <button className="bidBtn bidBtn-annonce"
                     onClick={() => {
-                        if (!prop.wantedBid) return;
-                        const currentBid = prop.wantedBid as Bid;
-                        const v = currentBid.Value;
-                        const nextType = v >= 200 ? BidType.kaputgeneral : v >= 190 ? BidType.kaput : BidType.annonce;
-                        prop.setWantedBid({ ...currentBid, Type: nextType } as Bid);
+                        finalizeBid("annonce")
                     }}
                 >
                     annonce
                 </button>
                 <button className="bidBtn bidBtn-severe"
                     onClick={() => {
-                        if (!prop.wantedBid) return;
-                        const currentBid = prop.wantedBid as Bid;
-                        const isSevere = prop.currentBid?.IsSevere ?? false;
-                        const nextType = isSevere ? BidType.surcontre : BidType.contre;
-                        prop.setWantedBid({ ...currentBid, Type: nextType, Value: NaN } as Bid);
+                        finalizeBid("contre")
                     }}
                 >
                     contre/surcontre

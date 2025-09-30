@@ -6,8 +6,8 @@ export enum BidType { pass = 0, annonce = 1, contre = 2, surcontre = 3, kaput = 
 export class Bid {
     public Player: number;
     public Type: BidType;
-    public Trump: number;
-    public Value: BidType;
+    public Trump: Card;
+    public Value: number;
     private contree: boolean = false;
     private surcontree: boolean = false;
     private surmanchee: boolean = false;
