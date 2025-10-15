@@ -161,8 +161,6 @@ export function OnPlayRequest(auth: { username: string, password: number }, cont
             r.CurrentRound = new Round((r.CurrentRound.FirstPlayer + 1) % 4)
             SyncBid(r.RoomNumber);
         }
-        if (r.CurrentRound.Tricks)
-            console.log("current winning card " + r.CurrentRound.Tricks.at(-1)?.WinningPlayIndex);
         SyncScoreBoard(r.RoomNumber);
         SyncTable(r.RoomNumber);
         SyncHands(r.RoomNumber);

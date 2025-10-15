@@ -13,7 +13,7 @@ export default class Room {
         this.userCount = 0;
         this.Users = [];
         this.Scores = [0, 0, 0, 0];
-        this.Teams = [-1, -1, -1, -1];
+        this.Teams = [0, 1, 0, 1];
         this.CurrentRound = new Round(0);
         this.RoomNumber = roomNumber;
     }

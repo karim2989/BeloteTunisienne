@@ -70,7 +70,7 @@ function openWebSocket() {
                 break;
             case "scoreboard sync":
                 let content_ss = obj.content as { teams: (-1 | 0 | 1)[], users: string[], scores: number[], currentPlayerIndex: number }
-                auth_inRoomIndex = content_ss.users.indexOf(auth_username);
+                auth_inRoomIndex = content_ss.users.indexOf(auth_username);                
                 nameboard = content_ss.users;
                 ExternalHooks.OnSyncScoreboard.forEach(e => e(content_ss.teams, content_ss.users, content_ss.scores, content_ss.currentPlayerIndex));
                 if (ExternalHooks.OnSyncScoreboard.length == 0)

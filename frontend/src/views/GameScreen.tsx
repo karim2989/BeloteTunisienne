@@ -52,7 +52,7 @@ export default function GameScreen(): ReactNode {
             <div className='flexfiller leftaside'>
                 <CombinedBiddingStatusArea currentBid={currentBid} wantedBid={wantedBid} setWantedBid={setWantedBid}/>
                 <div className=" square">variable area
-                    {!table || table.length == 0 ? <BiddingArea /> :
+                    {!table || table.length == 0 ?  "" :
                         table.filter(e => e > 0).map((e, i) =>
                             <span key={i} className={"card " + unicodeCardColors.get(CardUtils.ToString(e))}>
                                 {unicodeChars.get(CardUtils.ToString(e))}
